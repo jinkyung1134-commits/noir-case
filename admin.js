@@ -93,6 +93,10 @@ function heroStyle(settings = {}) {
     `--hero-overlay: ${clamp(settings.overlayStrength, 58, 0, 100) / 100}`,
     `--hero-content-y: ${clamp(settings.textTop, 50, 25, 85)}%`,
     `--hero-art-scale: ${clamp(settings.imageScale, 100, 50, 160) / 100}`,
+    `--hero-bg-start: ${settings.backgroundColor || "#050506"}`,
+    `--hero-bg-end: ${settings.backgroundEndColor || "#111214"}`,
+    `--hero-accent: ${settings.accentColor || "#b9975b"}`,
+    `--hero-text: ${settings.textColor || "#f7f3ea"}`,
   ].join("; ");
 }
 
@@ -271,6 +275,14 @@ function renderHeroEditor() {
   }
   const blend = normalizeBlend(slide.mediaBlend || product.mediaBlend);
   const settings = {
+    eyebrow: slide.eyebrow || "",
+    title: slide.title || "",
+    subtitle: slide.subtitle || "",
+    image: slide.image || "",
+    backgroundColor: slide.backgroundColor || "#050506",
+    backgroundEndColor: slide.backgroundEndColor || "#111214",
+    accentColor: slide.accentColor || "#b9975b",
+    textColor: slide.textColor || "#f7f3ea",
     tone: slide.tone ?? 34,
     imageBrightness: slide.imageBrightness ?? 78,
     backgroundGlow: slide.backgroundGlow ?? 22,
@@ -282,16 +294,16 @@ function renderHeroEditor() {
   heroEditor.innerHTML = `
     <div class="admin-preview-block">
       <strong>저장 전 예시 화면</strong>
-      <div class="admin-hero-preview" data-hero-preview style="--hero-image: url('${escapeHtml(product.image)}'); ${heroStyle(settings)} ${blendStyle(blend, product.image)}">
-        <div class="hero-preview-art blend-media" style="${blendStyle(blend, product.image)}">
+      <div class="admin-hero-preview" data-hero-preview style="--hero-image: url('${escapeHtml(settings.image || product.image)}'); ${heroStyle(settings)} ${blendStyle(blend, settings.image || product.image)}">
+        <div class="hero-preview-art blend-media" style="${blendStyle(blend, settings.image || product.image)}">
           <span class="blend-media-bg" aria-hidden="true"></span>
-          <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
+          <img src="${escapeHtml(settings.image || product.image)}" alt="${escapeHtml(settings.title || product.title)}" />
         </div>
         <div class="hero-preview-shade"></div>
         <div class="hero-preview-copy">
-          <p class="eyebrow">${escapeHtml(product.category || "Style Sets")}</p>
-          <h3>${escapeHtml(product.title)}</h3>
-          <p>${escapeHtml(product.subtitle)}</p>
+          <p class="eyebrow">${escapeHtml(settings.eyebrow || product.category || "Style Sets")}</p>
+          <h3>${escapeHtml(settings.title || product.title)}</h3>
+          <p>${escapeHtml(settings.subtitle || product.subtitle)}</p>
           <strong>${ProductStore.formatPrice(product.price)}</strong>
         </div>
       </div>
@@ -302,6 +314,30 @@ function renderHeroEditor() {
         <select name="heroProductId">
           ${products.map((item) => `<option value="${escapeHtml(item.id)}" ${item.id === product.id ? "selected" : ""}>${escapeHtml(item.title)}</option>`).join("")}
         </select>
+      </label>
+      <label>슬라이드 배지 문구
+        <input name="eyebrow" value="${escapeHtml(settings.eyebrow)}" placeholder="비우면 상품 카테고리 사용" />
+      </label>
+      <label>슬라이드 제목
+        <input name="title" value="${escapeHtml(settings.title)}" placeholder="비우면 상품명 사용" />
+      </label>
+      <label>슬라이드 설명
+        <textarea name="subtitle" placeholder="비우면 상품 설명 사용">${escapeHtml(settings.subtitle)}</textarea>
+      </label>
+      <label>슬라이드 이미지 주소
+        <input name="image" value="${escapeHtml(settings.image)}" placeholder="비우면 상품 대표 이미지 사용" />
+      </label>
+      <label>배경 시작색
+        <input name="backgroundColor" type="color" value="${escapeHtml(settings.backgroundColor)}" />
+      </label>
+      <label>배경 끝색
+        <input name="backgroundEndColor" type="color" value="${escapeHtml(settings.backgroundEndColor)}" />
+      </label>
+      <label>강조색
+        <input name="accentColor" type="color" value="${escapeHtml(settings.accentColor)}" />
+      </label>
+      <label>글자색
+        <input name="textColor" type="color" value="${escapeHtml(settings.textColor)}" />
       </label>
       <label>자동 전환 시간(초)
         <input name="intervalSeconds" type="number" min="2" value="${heroSettings.intervalSeconds || 5}" />
@@ -344,6 +380,14 @@ function readHeroSlideForm() {
   const data = new FormData(heroForm);
   return {
     productId: data.get("heroProductId"),
+    eyebrow: data.get("eyebrow").trim(),
+    title: data.get("title").trim(),
+    subtitle: data.get("subtitle").trim(),
+    image: data.get("image").trim(),
+    backgroundColor: data.get("backgroundColor"),
+    backgroundEndColor: data.get("backgroundEndColor"),
+    accentColor: data.get("accentColor"),
+    textColor: data.get("textColor"),
     tone: Number(data.get("tone")),
     imageBrightness: Number(data.get("imageBrightness")),
     backgroundGlow: Number(data.get("backgroundGlow")),
@@ -360,13 +404,14 @@ function updateHeroPreview() {
   const product = products.find((item) => item.id === productId);
   if (!preview || !product) return;
   const slide = readHeroSlideForm();
-  preview.style.cssText = `--hero-image: url('${escapeHtml(product.image)}'); ${heroStyle(slide)} ${blendStyle(slide.mediaBlend, product.image)}`;
-  preview.querySelector(".hero-preview-art").style.cssText = blendStyle(slide.mediaBlend, product.image);
-  preview.querySelector(".hero-preview-art img").src = product.image;
-  preview.querySelector(".hero-preview-art img").alt = product.title;
-  preview.querySelector(".hero-preview-copy .eyebrow").textContent = product.category || "Style Sets";
-  preview.querySelector(".hero-preview-copy h3").textContent = product.title;
-  preview.querySelector(".hero-preview-copy p:not(.eyebrow)").textContent = product.subtitle;
+  const image = slide.image || product.image;
+  preview.style.cssText = `--hero-image: url('${escapeHtml(image)}'); ${heroStyle(slide)} ${blendStyle(slide.mediaBlend, image)}`;
+  preview.querySelector(".hero-preview-art").style.cssText = blendStyle(slide.mediaBlend, image);
+  preview.querySelector(".hero-preview-art img").src = image;
+  preview.querySelector(".hero-preview-art img").alt = slide.title || product.title;
+  preview.querySelector(".hero-preview-copy .eyebrow").textContent = slide.eyebrow || product.category || "Style Sets";
+  preview.querySelector(".hero-preview-copy h3").textContent = slide.title || product.title;
+  preview.querySelector(".hero-preview-copy p:not(.eyebrow)").textContent = slide.subtitle || product.subtitle;
   preview.querySelector(".hero-preview-copy strong").textContent = ProductStore.formatPrice(product.price);
 }
 
@@ -608,18 +653,19 @@ function renderOrders() {
           .join("");
 }
 
-function saveHeroSettingsFromForm() {
+async function saveHeroSettingsFromForm() {
   const slides = currentHeroSlides();
   slides[selectedHeroIndex] = readHeroSlideForm();
-  heroSettings = ProductStore.saveHeroSettings({
+  const next = {
     ...heroSettings,
     intervalSeconds: Number(new FormData(heroForm).get("intervalSeconds")) || heroSettings.intervalSeconds,
     maxSlides: slides.length,
     selectedProductIds: slides.map((slide) => slide.productId),
     slides,
-  });
+  };
+  heroSettings = ProductStore.publishHeroSettings ? await ProductStore.publishHeroSettings(next) : ProductStore.saveHeroSettings(next);
   renderHeroAdmin();
-  showToast("메인 슬라이드를 저장했습니다.");
+  showToast("메인 슬라이드를 홈페이지와 동기화했습니다.");
 }
 
 async function saveSelectedProduct() {
@@ -659,17 +705,34 @@ async function saveSelectedProduct() {
     i18n: productTranslations(data, product.i18n),
   };
 
-  ProductStore.saveProducts(products);
+  products = ProductStore.publishProducts ? await ProductStore.publishProducts(products) : (ProductStore.saveProducts(products), products);
   renderHeroAdmin();
   renderProductAdmin();
-  showToast("상품을 저장했습니다.");
+  showToast("상품을 홈페이지와 동기화했습니다.");
 }
 
 document.querySelector("[data-add-hero-slide]").addEventListener("click", () => {
   const product = products[0];
   if (!product) return;
   const slides = currentHeroSlides();
-  slides.push({ productId: product.id, mediaBlend: normalizeBlend(product.mediaBlend), tone: 34, imageBrightness: 78, backgroundGlow: 22, overlayStrength: 58, textTop: 50, imageScale: 100 });
+  slides.push({
+    productId: product.id,
+    eyebrow: "",
+    title: "",
+    subtitle: "",
+    image: "",
+    backgroundColor: "#050506",
+    backgroundEndColor: "#111214",
+    accentColor: "#b9975b",
+    textColor: "#f7f3ea",
+    mediaBlend: normalizeBlend(product.mediaBlend),
+    tone: 34,
+    imageBrightness: 78,
+    backgroundGlow: 22,
+    overlayStrength: 58,
+    textTop: 50,
+    imageScale: 100,
+  });
   selectedHeroIndex = slides.length - 1;
   heroSettings = ProductStore.saveHeroSettings({ ...heroSettings, maxSlides: slides.length, selectedProductIds: slides.map((slide) => slide.productId), slides });
   renderHeroAdmin();
