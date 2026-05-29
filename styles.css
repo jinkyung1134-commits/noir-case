@@ -919,6 +919,8 @@ textarea {
 
 .motion-preview {
   object-fit: cover;
+  min-height: 360px;
+  background: #050506;
 }
 
 .admin-fields label:nth-child(5),
@@ -1214,8 +1216,8 @@ textarea {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: contain;
-  border: 1px solid var(--line);
-  background: #090909;
+  border: 0;
+  background: transparent;
 }
 
 .detail-thumbs {
@@ -1241,8 +1243,8 @@ textarea {
 .detail-video,
 .video-empty {
   width: 100%;
-  border: 1px solid var(--line);
-  background: #090909;
+  border: 0;
+  background: transparent;
 }
 
 .detail-video {
@@ -1414,16 +1416,16 @@ textarea {
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 42%, rgba(202, 164, 94, 0.16), transparent 34%),
-    #0b0c0e;
-  border: 1px solid var(--line);
-  overflow: hidden;
+    radial-gradient(circle at 50% 42%, rgba(202, 164, 94, 0.12), transparent 38%);
+  border: 0;
+  overflow: visible;
 }
 
 .apple-story-media img {
-  width: min(82%, 680px);
+  width: min(100%, 780px);
   max-height: 68vh;
   object-fit: contain;
+  filter: drop-shadow(0 34px 56px rgba(0, 0, 0, 0.44));
 }
 
 .apple-spec-showcase {
