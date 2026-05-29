@@ -1,0 +1,273 @@
+(function () {
+  const LANG_KEY = "noir-case-lang";
+  const supported = ["ko", "en", "zh"];
+  const labels = { ko: "한국어", en: "English", zh: "中文" };
+
+  const dict = {
+    ko: {
+      navProducts: "스타일 세트",
+      navQuality: "품질",
+      navSupport: "배송",
+      admin: "관리자",
+      cart: "장바구니",
+      detail: "상세 보기",
+      addCartLong: "장바구니 담기",
+      buyNow: "바로 결제",
+      checkout: "결제하기",
+      orderSheet: "주문서",
+      cartEmpty: "담긴 상품이 없습니다.",
+      productSearch: "상품 검색",
+      allCategories: "전체 카테고리",
+      featured: "추천순",
+      priceLow: "낮은 가격순",
+      priceHigh: "높은 가격순",
+      newest: "신상품순",
+      heroDefaultTitle: "케이스와 화면을 하나의 무드로",
+      heroDefaultCopy: "케이스, 배경화면, 위젯까지 맞춰 폰 전체의 인상을 완성하는 프리미엄 스타일링 세트.",
+      completeStyling: "Complete Phone Styling",
+      collectionTitle: "스타일 세트 컬렉션",
+      qualityTitle: "손에 드는 케이스와 매일 보는 화면까지",
+      qualityCopy: "케이스의 소재감과 배경화면의 색감, 위젯 구성까지 하나의 무드로 설계합니다. 폰을 켤 때부터 손에 쥘 때까지 자연스럽게 이어지도록 구성했습니다.",
+      deliveryDownload: "배송 + 다운로드",
+      deliveryDownloadCopy: "케이스는 배송으로, 배경화면과 위젯 파일은 디지털 다운로드로 제공할 수 있습니다.",
+      styleMatching: "스타일 매칭",
+      styleMatchingCopy: "케이스 컬러와 화면 디자인이 따로 놀지 않도록 세트 단위로 구성합니다.",
+      paymentReady: "결제 연동 준비",
+      paymentReadyCopy: "토스페이먼츠, 포트원, 카카오페이 같은 국내 PG를 붙일 수 있는 버튼 구조입니다.",
+      footer: "케이스와 화면 디자인을 맞춰주는 폰 스타일링 스토어",
+      productNotFound: "상품을 찾을 수 없습니다",
+      productNotFoundCopy: "관리자에서 상품을 숨김 처리했거나 삭제했습니다.",
+      backStore: "스토어로 돌아가기",
+      optionSelect: "옵션 선택",
+      quantity: "수량",
+      story: "제품 이야기",
+      included: "포함 구성",
+      experience: "제공 방식",
+      gallery: "사진과 영상",
+      buy: "구매",
+      digital: "화면 디자인",
+      bundle: "스타일 세트",
+      case: "케이스",
+      digitalDelivery: "디지털 다운로드",
+      bothDelivery: "배송 + 다운로드",
+      shippingDelivery: "배송 상품",
+      digitalExperience: "결제 후 배경화면, 위젯, 설치 가이드 파일을 디지털로 제공합니다.",
+      bothExperience: "케이스는 배송으로, 배경화면과 위젯 파일은 디지털 다운로드로 제공합니다.",
+      shippingExperience: "케이스를 입력한 배송지로 발송합니다.",
+      noVideo: "등록된 상품 영상이 없습니다.",
+      checkoutTitle: "주문서 작성",
+      name: "받는 분",
+      phone: "연락처",
+      email: "이메일",
+      address: "주소",
+      addressDetail: "상세 주소",
+      memo: "배송 요청사항",
+      createOrder: "주문 생성 및 결제",
+      checkoutHelp: "현재는 데모 주문으로 저장됩니다. PG 키를 연결하면 실제 결제창으로 전환할 수 있습니다.",
+      orderProducts: "주문 상품",
+      total: "총 결제 금액",
+    },
+    en: {
+      navProducts: "Style Sets",
+      navQuality: "Quality",
+      navSupport: "Delivery",
+      admin: "Admin",
+      cart: "Cart",
+      detail: "View details",
+      addCartLong: "Add to cart",
+      buyNow: "Buy now",
+      checkout: "Checkout",
+      orderSheet: "Order",
+      cartEmpty: "Your cart is empty.",
+      productSearch: "Search products",
+      allCategories: "All categories",
+      featured: "Featured",
+      priceLow: "Price: low to high",
+      priceHigh: "Price: high to low",
+      newest: "Newest",
+      heroDefaultTitle: "Case and screen, one complete mood.",
+      heroDefaultCopy: "Premium phone styling sets matching cases, wallpapers, widgets, and setup guides.",
+      completeStyling: "Complete Phone Styling",
+      collectionTitle: "Style Set Collection",
+      qualityTitle: "The case you hold. The screen you see.",
+      qualityCopy: "We match tactile case finishes, wallpaper tones, and widget layouts into one cohesive look for your phone.",
+      deliveryDownload: "Shipping + Download",
+      deliveryDownloadCopy: "Cases ship physically, while wallpapers and widget files can be delivered digitally.",
+      styleMatching: "Style Matching",
+      styleMatchingCopy: "Each set is curated so the case color and screen design feel like one system.",
+      paymentReady: "Payment Ready",
+      paymentReadyCopy: "The checkout flow is prepared for providers like Toss Payments, PortOne, and Kakao Pay.",
+      footer: "A phone styling store matching cases and screen designs",
+      productNotFound: "Product not found",
+      productNotFoundCopy: "This product may be hidden or removed by the administrator.",
+      backStore: "Back to store",
+      optionSelect: "Choose option",
+      quantity: "Quantity",
+      story: "Product story",
+      included: "What's included",
+      experience: "How you receive it",
+      gallery: "Photos and video",
+      buy: "Buy",
+      digital: "Screen Design",
+      bundle: "Style Set",
+      case: "Case",
+      digitalDelivery: "Digital download",
+      bothDelivery: "Shipping + download",
+      shippingDelivery: "Ships physically",
+      digitalExperience: "Wallpaper, widget, and setup guide files are provided digitally after purchase.",
+      bothExperience: "The case ships to you, while wallpapers and widgets are provided as digital downloads.",
+      shippingExperience: "The case ships to your delivery address.",
+      noVideo: "No product video has been uploaded.",
+      checkoutTitle: "Checkout",
+      name: "Recipient",
+      phone: "Phone",
+      email: "Email",
+      address: "Address",
+      addressDetail: "Address detail",
+      memo: "Delivery note",
+      createOrder: "Create order & pay",
+      checkoutHelp: "This currently saves a demo order. Add a payment key to open a real checkout.",
+      orderProducts: "Order items",
+      total: "Total",
+    },
+    zh: {
+      navProducts: "风格套装",
+      navQuality: "品质",
+      navSupport: "配送",
+      admin: "管理",
+      cart: "购物车",
+      detail: "查看详情",
+      addCartLong: "加入购物车",
+      buyNow: "立即购买",
+      checkout: "结账",
+      orderSheet: "订单",
+      cartEmpty: "购物车为空。",
+      productSearch: "搜索商品",
+      allCategories: "全部分类",
+      featured: "推荐",
+      priceLow: "价格从低到高",
+      priceHigh: "价格从高到低",
+      newest: "新品",
+      heroDefaultTitle: "手机壳与屏幕，统一成一种风格。",
+      heroDefaultCopy: "将手机壳、壁纸、小组件与设置指南组合成完整的高级手机风格套装。",
+      completeStyling: "完整手机风格",
+      collectionTitle: "风格套装系列",
+      qualityTitle: "手中的手机壳，每天看到的屏幕。",
+      qualityCopy: "我们把手机壳质感、壁纸色调与小组件布局整合成一个完整的手机视觉系统。",
+      deliveryDownload: "配送 + 下载",
+      deliveryDownloadCopy: "手机壳实体配送，壁纸和小组件文件可通过数字下载提供。",
+      styleMatching: "风格搭配",
+      styleMatchingCopy: "每个套装都经过搭配，让手机壳颜色和屏幕设计看起来像同一个系统。",
+      paymentReady: "支付准备",
+      paymentReadyCopy: "结账流程已预留，可接入 Toss Payments、PortOne、Kakao Pay 等支付服务。",
+      footer: "搭配手机壳与屏幕设计的手机风格商店",
+      productNotFound: "未找到商品",
+      productNotFoundCopy: "该商品可能已被管理员隐藏或删除。",
+      backStore: "返回商店",
+      optionSelect: "选择选项",
+      quantity: "数量",
+      story: "产品故事",
+      included: "包含内容",
+      experience: "交付方式",
+      gallery: "照片和视频",
+      buy: "购买",
+      digital: "屏幕设计",
+      bundle: "风格套装",
+      case: "手机壳",
+      digitalDelivery: "数字下载",
+      bothDelivery: "配送 + 下载",
+      shippingDelivery: "实体配送",
+      digitalExperience: "购买后提供壁纸、小组件和设置指南文件。",
+      bothExperience: "手机壳实体配送，壁纸和小组件以数字下载方式提供。",
+      shippingExperience: "手机壳将配送到你填写的地址。",
+      noVideo: "尚未上传商品视频。",
+      checkoutTitle: "填写订单",
+      name: "收件人",
+      phone: "电话",
+      email: "邮箱",
+      address: "地址",
+      addressDetail: "详细地址",
+      memo: "配送备注",
+      createOrder: "创建订单并支付",
+      checkoutHelp: "当前会保存为演示订单。添加支付密钥后可打开真实结账页。",
+      orderProducts: "订单商品",
+      total: "合计",
+    },
+  };
+
+  function normalize(lang) {
+    const lower = String(lang || "").toLowerCase();
+    if (lower.startsWith("zh")) return "zh";
+    if (lower.startsWith("ko")) return "ko";
+    return "en";
+  }
+
+  function current() {
+    return localStorage.getItem(LANG_KEY) || normalize(navigator.language);
+  }
+
+  async function detect() {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved) return saved;
+    try {
+      const response = await fetch("https://ipapi.co/json/", { cache: "no-store" });
+      const data = await response.json();
+      if (data.country_code === "KR") return "ko";
+      if (["CN", "HK", "TW", "MO"].includes(data.country_code)) return "zh";
+      return normalize(data.languages || navigator.language);
+    } catch (error) {
+      return normalize(navigator.language);
+    }
+  }
+
+  function t(key) {
+    const lang = current();
+    return (dict[lang] && dict[lang][key]) || dict.en[key] || key;
+  }
+
+  function setLanguage(lang) {
+    localStorage.setItem(LANG_KEY, normalize(lang));
+    document.documentElement.lang = current();
+    window.dispatchEvent(new CustomEvent("languagechange", { detail: { lang: current() } }));
+  }
+
+  function localizedProduct(product) {
+    const lang = current();
+    const local = product && product.i18n && product.i18n[lang];
+    return local ? { ...product, ...local } : product;
+  }
+
+  function mountSwitcher() {
+    const header = document.querySelector(".site-header");
+    if (!header || document.querySelector("[data-language-select]")) return;
+    const select = document.createElement("select");
+    select.className = "language-select";
+    select.dataset.languageSelect = "";
+    select.innerHTML = supported.map((lang) => `<option value="${lang}">${labels[lang]}</option>`).join("");
+    select.value = current();
+    select.addEventListener("change", () => setLanguage(select.value));
+    header.appendChild(select);
+  }
+
+  function applyStatic() {
+    document.documentElement.lang = current();
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      node.textContent = t(node.dataset.i18n);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
+      node.placeholder = t(node.dataset.i18nPlaceholder);
+    });
+    const select = document.querySelector("[data-language-select]");
+    if (select) select.value = current();
+  }
+
+  window.I18n = { t, current, detect, setLanguage, localizedProduct, applyStatic, mountSwitcher };
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const before = current();
+    if (!localStorage.getItem(LANG_KEY)) localStorage.setItem(LANG_KEY, await detect());
+    mountSwitcher();
+    applyStatic();
+    if (current() !== before) window.dispatchEvent(new CustomEvent("languagechange", { detail: { lang: current() } }));
+  });
+})();
