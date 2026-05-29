@@ -18,6 +18,15 @@
       video: "",
       digitalFiles: [],
       includedItems: ["아라미드 슬림 케이스 1개", "블랙 배경화면 12종", "위젯 이미지 4종", "설치 가이드"],
+      storySections: [
+        { eyebrow: "Material", title: "손끝에 남는 매트 블랙", body: "얇고 단단한 케이스 표면이 빛을 과하게 반사하지 않아 화면 디자인과 차분하게 맞물립니다.", image: "assets/case-aramid.png" },
+        { eyebrow: "Screen Set", title: "잠금화면까지 하나의 톤으로", body: "배경화면과 위젯 이미지를 함께 제공해 케이스를 씌운 순간부터 화면을 켠 순간까지 같은 인상을 만듭니다.", image: "assets/hero-case.png" },
+      ],
+      specs: [
+        { label: "Profile", value: "1.2mm", body: "카메라 보호 립" },
+        { label: "Weight", value: "38g", body: "슬림 라인 평균 중량" },
+        { label: "Set", value: "16 files", body: "배경화면과 위젯 구성" },
+      ],
       deliveryType: "both",
       badge: "STYLE SET",
       category: "Style Sets",
@@ -30,12 +39,30 @@
           subtitle: "A signature set matching a matte black case with black widgets and wallpapers.",
           detail: "A premium phone styling set matching the tactile finish of the case with the tone of your screen. It fits black desk setups, car interiors, and tailored everyday style.",
           includedItems: ["Aramid slim case", "12 black wallpapers", "4 widget images", "Setup guide"],
+          storySections: [
+            { eyebrow: "Material", title: "Matte black at your fingertips", body: "A slim, rigid surface keeps reflections low and pairs naturally with a dark screen system.", image: "assets/case-aramid.png" },
+            { eyebrow: "Screen Set", title: "One tone from lock screen to case", body: "Wallpapers and widget images complete the same impression from the moment the screen lights up.", image: "assets/hero-case.png" },
+          ],
+          specs: [
+            { label: "Profile", value: "1.2mm", body: "Camera protection lip" },
+            { label: "Weight", value: "38g", body: "Average slim-line weight" },
+            { label: "Set", value: "16 files", body: "Wallpaper and widget assets" },
+          ],
         },
         zh: {
           title: "黑色指挥风格套装",
           subtitle: "磨砂黑手机壳搭配黑色小组件和壁纸的代表套装。",
           detail: "高级手机风格套装，将手机壳质感与屏幕色调统一起来，适合黑色桌面、车内空间和利落的日常风格。",
           includedItems: ["芳纶纤维薄款手机壳", "12 张黑色壁纸", "4 个小组件图片", "设置指南"],
+          storySections: [
+            { eyebrow: "材质", title: "指尖上的哑光黑", body: "纤薄而坚固的表面减少反光，与深色屏幕系统自然融合。", image: "assets/case-aramid.png" },
+            { eyebrow: "屏幕套装", title: "从锁屏到手机壳统一色调", body: "壁纸和小组件图片让屏幕亮起的瞬间也保持同一种风格。", image: "assets/hero-case.png" },
+          ],
+          specs: [
+            { label: "厚度", value: "1.2mm", body: "相机保护边框" },
+            { label: "重量", value: "38g", body: "薄款平均重量" },
+            { label: "套装", value: "16 files", body: "壁纸和小组件素材" },
+          ],
         },
       },
     },
@@ -52,6 +79,15 @@
       video: "",
       digitalFiles: [],
       includedItems: ["러기드 보호 케이스 1개", "다크 메탈 배경화면 10종", "잠금화면 위젯 구성", "설치 가이드"],
+      storySections: [
+        { eyebrow: "Protection", title: "두껍지 않게, 더 단단하게", body: "모서리 충격을 분산하는 러기드 구조로 일상 사용에서 안심감을 줍니다.", image: "assets/case-tactical.png" },
+        { eyebrow: "Metal Mood", title: "다크 메탈 화면 디자인", body: "잠금화면과 홈 화면이 케이스의 보호감과 같은 무드로 이어집니다.", image: "assets/hero-case.png" },
+      ],
+      specs: [
+        { label: "Guard", value: "360°", body: "모서리 충격 분산" },
+        { label: "Files", value: "10+", body: "다크 메탈 배경화면" },
+        { label: "Guide", value: "PDF", body: "설치 가이드 제공" },
+      ],
       deliveryType: "both",
       badge: "RUGGED SET",
       category: "Style Sets",
@@ -64,12 +100,30 @@
           subtitle: "A rugged case paired with dark metal screen designs.",
           detail: "A protective styling set combining a rugged case, dark metal wallpapers, widget layouts, and a simple setup guide.",
           includedItems: ["Rugged protective case", "10 dark metal wallpapers", "Lock screen widget layout", "Setup guide"],
+          storySections: [
+            { eyebrow: "Protection", title: "Tougher without feeling bulky", body: "A rugged corner structure disperses impact and keeps daily use reassuring.", image: "assets/case-tactical.png" },
+            { eyebrow: "Metal Mood", title: "Dark metal screen design", body: "The lock screen and home screen carry the same protective tone as the case.", image: "assets/hero-case.png" },
+          ],
+          specs: [
+            { label: "Guard", value: "360°", body: "Corner impact dispersion" },
+            { label: "Files", value: "10+", body: "Dark metal wallpapers" },
+            { label: "Guide", value: "PDF", body: "Setup guide included" },
+          ],
         },
         zh: {
           title: "战术屏幕套装",
           subtitle: "坚固手机壳搭配深色金属屏幕设计。",
           detail: "保护型风格套装，包含坚固手机壳、深色金属壁纸、小组件布局和简单设置指南。",
           includedItems: ["坚固保护手机壳", "10 张深色金属壁纸", "锁屏小组件布局", "设置指南"],
+          storySections: [
+            { eyebrow: "保护", title: "不厚重，也更安心", body: "坚固的边角结构分散冲击，适合日常使用。", image: "assets/case-tactical.png" },
+            { eyebrow: "金属质感", title: "深色金属屏幕设计", body: "锁屏和主屏延续手机壳的保护感与深色风格。", image: "assets/hero-case.png" },
+          ],
+          specs: [
+            { label: "保护", value: "360°", body: "边角冲击分散" },
+            { label: "文件", value: "10+", body: "深色金属壁纸" },
+            { label: "指南", value: "PDF", body: "包含设置指南" },
+          ],
         },
       },
     },
@@ -86,6 +140,15 @@
       video: "",
       digitalFiles: [],
       includedItems: ["배경화면 15종", "위젯 이미지 6종", "설정 가이드 PDF"],
+      storySections: [
+        { eyebrow: "Digital", title: "케이스 없이도 완성되는 화면", body: "블랙 톤 배경화면과 위젯 이미지만으로 폰의 첫인상을 정리합니다.", image: "assets/hero-case.png" },
+        { eyebrow: "Setup", title: "따라 하기 쉬운 구성", body: "설정 가이드를 따라 잠금화면과 홈 화면을 빠르게 맞출 수 있습니다.", image: "assets/case-leather.png" },
+      ],
+      specs: [
+        { label: "Wallpaper", value: "15", body: "배경화면 파일" },
+        { label: "Widget", value: "6", body: "위젯 이미지" },
+        { label: "Delivery", value: "Instant", body: "디지털 다운로드" },
+      ],
       deliveryType: "digital",
       badge: "DIGITAL",
       category: "Wallpapers",
@@ -98,12 +161,30 @@
           subtitle: "A wallpaper and widget pack for customers who want to refresh only the screen.",
           detail: "A digital-only product for organizing your phone screen in a clean black tone. Includes wallpapers, widget images, and a setup guide.",
           includedItems: ["15 wallpapers", "6 widget images", "Setup guide PDF"],
+          storySections: [
+            { eyebrow: "Digital", title: "A complete screen without a case", body: "Black wallpapers and widget images refine the first impression of your phone.", image: "assets/hero-case.png" },
+            { eyebrow: "Setup", title: "Easy to follow", body: "Use the guide to quickly match your lock screen and home screen.", image: "assets/case-leather.png" },
+          ],
+          specs: [
+            { label: "Wallpaper", value: "15", body: "Wallpaper files" },
+            { label: "Widget", value: "6", body: "Widget images" },
+            { label: "Delivery", value: "Instant", body: "Digital download" },
+          ],
         },
         zh: {
           title: "黑色数字包",
           subtitle: "适合只想更新屏幕的壁纸与小组件包。",
           detail: "数字专用商品，用简洁黑色调整理手机屏幕。包含壁纸、小组件图片和设置指南。",
           includedItems: ["15 张壁纸", "6 个小组件图片", "设置指南 PDF"],
+          storySections: [
+            { eyebrow: "数字", title: "没有手机壳也能完成屏幕风格", body: "黑色壁纸和小组件图片可以快速整理手机第一印象。", image: "assets/hero-case.png" },
+            { eyebrow: "设置", title: "容易跟随的配置", body: "按照指南快速搭配锁屏和主屏。", image: "assets/case-leather.png" },
+          ],
+          specs: [
+            { label: "壁纸", value: "15", body: "壁纸文件" },
+            { label: "小组件", value: "6", body: "小组件图片" },
+            { label: "交付", value: "Instant", body: "数字下载" },
+          ],
         },
       },
     },
@@ -159,11 +240,27 @@
       .filter(Boolean);
   }
 
+  function cleanObjects(value, fallback = []) {
+    if (!Array.isArray(value)) return fallback;
+    return value
+      .filter((item) => item && typeof item === "object")
+      .map((item) => ({ ...item }))
+      .filter((item) => Object.values(item).some(Boolean));
+  }
+
   function normalizeProduct(product) {
     const image = product.image || "assets/case-aramid.png";
     const gallery = cleanList(product.gallery);
     const productType = product.productType || "case";
     const includedItems = cleanList(product.includedItems);
+    const fallbackStorySections = [
+      { eyebrow: product.badge || "Design", title: product.title || "상품 이야기", body: product.detail || product.subtitle || "상품 상세 설명", image },
+    ];
+    const fallbackSpecs = [
+      { label: "Type", value: productType === "digital" ? "Digital" : "Case", body: product.deliveryType || "shipping" },
+      { label: "Stock", value: productType === "digital" ? "∞" : String(Number(product.stock) || 0), body: "available" },
+      { label: "Set", value: String(includedItems.length || 1), body: "included items" },
+    ];
     return {
       id: product.id || "product-" + Date.now(),
       title: product.title || "새 스타일 세트",
@@ -176,6 +273,8 @@
       video: product.video || "",
       digitalFiles: cleanList(product.digitalFiles),
       includedItems: includedItems.length ? includedItems : ["상품 1개"],
+      storySections: cleanObjects(product.storySections, fallbackStorySections),
+      specs: cleanObjects(product.specs, fallbackSpecs),
       deliveryType: product.deliveryType || (productType === "digital" ? "digital" : productType === "bundle" ? "both" : "shipping"),
       badge: product.badge || "NEW",
       category: product.category || "Style Sets",
