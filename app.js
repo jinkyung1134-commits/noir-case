@@ -97,13 +97,13 @@ function applyBlendStyle(element, settings = {}) {
   });
 }
 
-function applyHeroSettings() {
-  const tone = Number(heroSettings.tone ?? 34);
-  const brightness = Number(heroSettings.imageBrightness ?? 78);
-  const glow = Number(heroSettings.backgroundGlow ?? 22);
-  const overlay = Number(heroSettings.overlayStrength ?? 58);
-  const textTop = Number(heroSettings.textTop ?? 50);
-  const imageScale = Number(heroSettings.imageScale ?? 100);
+function applyHeroSettings(settings = heroSettings) {
+  const tone = Number(settings.tone ?? 34);
+  const brightness = Number(settings.imageBrightness ?? 78);
+  const glow = Number(settings.backgroundGlow ?? 22);
+  const overlay = Number(settings.overlayStrength ?? 58);
+  const textTop = Number(settings.textTop ?? 50);
+  const imageScale = Number(settings.imageScale ?? 100);
   heroSection.style.setProperty("--hero-tone", tone / 100);
   heroSection.style.setProperty("--hero-image-brightness", brightness / 100);
   heroSection.style.setProperty("--hero-bg-opacity", glow / 100);
@@ -157,25 +157,29 @@ function renderProducts() {
     : `<p class="empty-state">${emptyMessage()}</p>`;
 }
 
-function getHeroProducts() {
-  const selected = heroSettings.selectedProductIds
-    .map((id) => products.find((product) => product.id === id))
-    .filter(Boolean);
-  const fallback = products.filter((product) => !selected.some((item) => item.id === product.id));
-  return [...selected, ...fallback].slice(0, Math.max(1, Number(heroSettings.maxSlides) || 1));
+function getHeroSlides() {
+  const configuredSlides = Array.isArray(heroSettings.slides) ? heroSettings.slides : [];
+  const slides = configuredSlides
+    .map((slide) => ({ ...slide, product: products.find((product) => product.id === slide.productId) }))
+    .filter((slide) => slide.product);
+  const fallbackProducts = products.filter((product) => !slides.some((slide) => slide.product.id === product.id));
+  return [...slides, ...fallbackProducts.map((product) => ({ productId: product.id, product }))].slice(0, Math.max(1, Number(heroSettings.maxSlides) || 1));
 }
 
 function renderHero() {
-  heroProducts = getHeroProducts();
+  heroProducts = getHeroSlides();
   if (!heroProducts.length) return;
   if (heroIndex >= heroProducts.length) heroIndex = 0;
 
-  const product = I18n.localizedProduct(heroProducts[heroIndex]);
+  const slide = heroProducts[heroIndex];
+  const rawProduct = slide.product;
+  const product = I18n.localizedProduct(rawProduct);
+  const blend = { ...rawProduct.mediaBlend, ...(slide.mediaBlend || {}) };
   heroImage.src = product.image;
   heroImage.alt = product.title;
   heroSection.style.setProperty("--hero-image", `url('${product.image}')`);
-  applyHeroSettings();
-  applyBlendStyle(heroSection, product.mediaBlend);
+  applyHeroSettings(slide);
+  applyBlendStyle(heroSection, blend);
   heroCategory.textContent = product.category || "Phone Styling Set";
   heroTitle.textContent = product.title;
   heroCopy.textContent = product.subtitle;
@@ -269,7 +273,7 @@ productGrid.addEventListener("click", (event) => {
 
 document.querySelector("[data-hero-add]").addEventListener("click", () => {
   if (!heroProducts.length) return;
-  ProductStore.addToCart(heroProducts[heroIndex], 1, defaultOption());
+  ProductStore.addToCart(heroProducts[heroIndex].product, 1, defaultOption());
   renderCart();
   cartDrawer.classList.add("open");
   showToast(addedMessage());
