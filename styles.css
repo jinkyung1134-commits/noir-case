@@ -870,6 +870,57 @@ textarea {
   margin: 0;
 }
 
+.sample-asset-panel {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.sample-asset-panel p {
+  margin: 4px 0 0;
+  color: var(--dim);
+  font-size: 13px;
+}
+
+.sample-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.sample-asset-grid article {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 0;
+}
+
+.sample-asset-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: #050506;
+}
+
+.sample-asset-grid span {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sample-asset-grid code {
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.motion-preview {
+  object-fit: cover;
+}
+
 .admin-fields label:nth-child(5),
 .admin-fields label:nth-child(6),
 .admin-fields label:nth-child(7),
@@ -1745,6 +1796,7 @@ textarea {
   .admin-product-layout,
   .admin-fields,
   .translation-card,
+  .sample-asset-grid,
   .order-card,
   .hero-setting-grid,
   .featured-product-list,
