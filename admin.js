@@ -144,6 +144,106 @@ function renderLanguageFields(product, index) {
   `;
 }
 
+function blendValue(product, key, fallback) {
+  return product.mediaBlend && product.mediaBlend[key] !== undefined ? product.mediaBlend[key] : fallback;
+}
+
+function adminBlendStyle(product) {
+  const fade = Number(blendValue(product, "fade", 18));
+  const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
+  const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
+  const edge = Math.max(soft + 4, Math.min(98, 100 - fade * 0.35));
+  const bgSoft = Math.max(24, Math.min(80, 100 - fade * 1.5));
+  return [
+    `--blend-image: url('${escapeHtml(product.image)}')`,
+    `--blend-focus-x: ${blendValue(product, "focusX", 56)}%`,
+    `--blend-focus-y: ${blendValue(product, "focusY", 52)}%`,
+    `--blend-width: ${blendValue(product, "width", 76)}%`,
+    `--blend-height: ${blendValue(product, "height", 70)}%`,
+    `--blend-blur: ${blendValue(product, "blur", 48)}px`,
+    `--blend-glow: ${Number(blendValue(product, "glow", 22)) / 100}`,
+    `--blend-overlay: ${blendValue(product, "enabled", true) ? 1 : 0}`,
+    `--blend-solid: ${solid}%`,
+    `--blend-soft: ${soft}%`,
+    `--blend-edge: ${edge}%`,
+    `--blend-bg-soft: ${bgSoft}%`,
+  ].join("; ");
+}
+
+function renderBlendControls(product, index) {
+  const enabled = blendValue(product, "enabled", true);
+  return `
+    <div class="blend-admin-panel">
+      <div class="admin-section-note compact-note">
+        <strong>이미지/영상 자연 연결 설정</strong>
+        <span>사진이 배경에 녹아드는 중심과 페이드 영역을 직접 지정합니다. 메인 화면, 상품 상세, 샘플 이미지에 같이 적용됩니다.</span>
+      </div>
+      <label class="toggle-row">
+        <input name="blendEnabled-${index}" type="checkbox" ${enabled ? "checked" : ""} />
+        <span>블렌딩 사용</span>
+      </label>
+      <div class="blend-control-grid">
+        <label>중심 위치 X
+          <input name="blendFocusX-${index}" type="range" min="0" max="100" value="${blendValue(product, "focusX", 56)}" />
+        </label>
+        <label>중심 위치 Y
+          <input name="blendFocusY-${index}" type="range" min="0" max="100" value="${blendValue(product, "focusY", 52)}" />
+        </label>
+        <label>가로 유지 영역
+          <input name="blendWidth-${index}" type="range" min="35" max="120" value="${blendValue(product, "width", 76)}" />
+        </label>
+        <label>세로 유지 영역
+          <input name="blendHeight-${index}" type="range" min="35" max="120" value="${blendValue(product, "height", 70)}" />
+        </label>
+        <label>가장자리 녹임
+          <input name="blendFade-${index}" type="range" min="4" max="36" value="${blendValue(product, "fade", 18)}" />
+        </label>
+        <label>배경 확산
+          <input name="blendBlur-${index}" type="range" min="0" max="90" value="${blendValue(product, "blur", 48)}" />
+        </label>
+        <label>뒤쪽 빛 번짐
+          <input name="blendGlow-${index}" type="range" min="0" max="70" value="${blendValue(product, "glow", 22)}" />
+        </label>
+      </div>
+    </div>
+  `;
+}
+
+function readBlendSettings(data, index) {
+  return {
+    enabled: data.get(`blendEnabled-${index}`) === "on",
+    focusX: Number(data.get(`blendFocusX-${index}`)),
+    focusY: Number(data.get(`blendFocusY-${index}`)),
+    width: Number(data.get(`blendWidth-${index}`)),
+    height: Number(data.get(`blendHeight-${index}`)),
+    fade: Number(data.get(`blendFade-${index}`)),
+    blur: Number(data.get(`blendBlur-${index}`)),
+    glow: Number(data.get(`blendGlow-${index}`)),
+  };
+}
+
+function blendStyleFromSettings(settings, image) {
+  const fade = Number(settings.fade ?? 18);
+  const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
+  const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
+  const edge = Math.max(soft + 4, Math.min(98, 100 - fade * 0.35));
+  const bgSoft = Math.max(24, Math.min(80, 100 - fade * 1.5));
+  return [
+    `--blend-image: url('${escapeHtml(image)}')`,
+    `--blend-focus-x: ${Number(settings.focusX ?? 56)}%`,
+    `--blend-focus-y: ${Number(settings.focusY ?? 52)}%`,
+    `--blend-width: ${Number(settings.width ?? 76)}%`,
+    `--blend-height: ${Number(settings.height ?? 70)}%`,
+    `--blend-blur: ${Number(settings.blur ?? 48)}px`,
+    `--blend-glow: ${Number(settings.glow ?? 22) / 100}`,
+    `--blend-overlay: ${settings.enabled !== false ? 1 : 0}`,
+    `--blend-solid: ${solid}%`,
+    `--blend-soft: ${soft}%`,
+    `--blend-edge: ${edge}%`,
+    `--blend-bg-soft: ${bgSoft}%`,
+  ].join("; ");
+}
+
 function compactLanguageFields(fields) {
   return Object.fromEntries(Object.entries(fields).filter(([, value]) => (Array.isArray(value) ? value.length > 0 : Boolean(value))));
 }
@@ -282,10 +382,16 @@ function renderEditor() {
           <legend>${index + 1}번 상품</legend>
           <div class="admin-product-layout">
             <div class="admin-preview">
-              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
-              <span>${product.status === "hidden" ? "숨김" : "노출중"}</span>
+              <span class="blend-media admin-preview-media" style="${adminBlendStyle(product)}">
+                <span class="blend-media-bg" aria-hidden="true"></span>
+                <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
+              </span>
+              <span class="admin-preview-status">${product.status === "hidden" ? "숨김" : "노출중"}</span>
             </div>
             <div class="admin-fields">
+              <details class="admin-edit-group" open>
+                <summary>기본 정보</summary>
+                <div class="admin-group-grid">
               <div class="admin-section-note">
                 <strong>한국어 기본 정보</strong>
                 <span>한국어 페이지와 번역이 비어 있는 언어의 기본값으로 사용됩니다.</span>
@@ -336,6 +442,11 @@ function renderEditor() {
               <label>포함 구성
                 <textarea name="includedItems-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.includedItems.join("\n"))}</textarea>
               </label>
+                </div>
+              </details>
+              <details class="admin-edit-group" open>
+                <summary>사진/영상 업로드</summary>
+                <div class="admin-group-grid">
               <label>대표 이미지 주소
                 <input name="image-${index}" value="${escapeHtml(product.image)}" />
               </label>
@@ -360,6 +471,12 @@ function renderEditor() {
               <label>디지털 파일 업로드
                 <input name="digitalFileUploads-${index}" type="file" multiple />
               </label>
+              ${renderBlendControls(product, index)}
+                </div>
+              </details>
+              <details class="admin-edit-group">
+                <summary>옵션/번역/노출</summary>
+                <div class="admin-group-grid">
               <label>옵션
                 <textarea name="optionText-${index}" placeholder="iPhone 15, Galaxy S24">${escapeHtml(product.optionText)}</textarea>
               </label>
@@ -373,6 +490,8 @@ function renderEditor() {
                   <option value="hidden" ${product.status === "hidden" ? "selected" : ""}>숨김</option>
                 </select>
               </label>
+                </div>
+              </details>
             </div>
           </div>
           <button class="danger-btn compact" type="button" data-delete-product="${index}">이 상품 삭제</button>
@@ -428,6 +547,7 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
     optionText: "iPhone 15, iPhone 15 Pro, Galaxy S24",
     stock: 10,
     status: "active",
+    mediaBlend: { enabled: true, focusX: 56, focusY: 52, width: 76, height: 70, fade: 18, blur: 48, glow: 22 },
     i18n: {},
   });
   ProductStore.saveProducts(products);
@@ -482,6 +602,18 @@ editorForm.addEventListener("click", (event) => {
   showToast("상품을 삭제했습니다.");
 });
 
+editorForm.addEventListener("input", (event) => {
+  const match = event.target.name && event.target.name.match(/^blend(?:Enabled|FocusX|FocusY|Width|Height|Fade|Blur|Glow)-(\d+)$/);
+  if (!match) return;
+  const index = Number(match[1]);
+  const formData = new FormData(editorForm);
+  const fieldset = event.target.closest(".product-editor");
+  const preview = fieldset && fieldset.querySelector(".admin-preview-media");
+  if (!preview) return;
+  const imageInput = editorForm.querySelector(`[name="image-${index}"]`);
+  preview.style.cssText = blendStyleFromSettings(readBlendSettings(formData, index), imageInput ? imageInput.value : products[index].image);
+});
+
 editorForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(editorForm);
@@ -516,6 +648,7 @@ editorForm.addEventListener("submit", async (event) => {
       optionText: data.get(`optionText-${index}`).trim(),
       stock: Number(data.get(`stock-${index}`)),
       status: data.get(`status-${index}`),
+      mediaBlend: readBlendSettings(data, index),
       i18n: productTranslations(data, index, products[index].i18n),
     });
   }
