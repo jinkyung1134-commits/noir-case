@@ -55,6 +55,17 @@ function deliveryLabel(product) {
   return I18n.t("shippingDelivery");
 }
 
+function blendedImage(src, alt, className = "") {
+  const image = escapeHtml(src);
+  const label = escapeHtml(alt);
+  return `
+    <span class="blend-media ${className}" style="--blend-image: url('${image}')">
+      <span class="blend-media-bg" aria-hidden="true"></span>
+      <img src="${image}" alt="${label}" />
+    </span>
+  `;
+}
+
 function renderStorySections(product) {
   return product.storySections
     .map(
@@ -66,7 +77,7 @@ function renderStorySections(product) {
             <p>${escapeHtml(section.body || product.detail)}</p>
           </div>
           <div class="apple-story-media">
-            <img src="${escapeHtml(section.image || product.image)}" alt="${escapeHtml(section.title || product.title)}" />
+            ${blendedImage(section.image || product.image, section.title || product.title)}
           </div>
         </article>
       `,
@@ -108,7 +119,7 @@ function renderDetail() {
         <strong>${ProductStore.formatPrice(displayProduct.price)}</strong>
       </div>
       <div class="apple-hero-visual">
-        <img src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" />
+        ${blendedImage(displayProduct.image, displayProduct.title, "hero-blend")}
       </div>
     </section>
 
@@ -155,7 +166,9 @@ function renderDetail() {
         <p class="eyebrow">${I18n.t("gallery")}</p>
         <h2>${I18n.t("gallery")}</h2>
       </div>
-      <img class="detail-main-image" src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" data-main-image />
+      <div class="detail-main-image" data-main-image-wrap>
+        ${blendedImage(displayProduct.image, displayProduct.title)}
+      </div>
       <div class="detail-thumbs">
         ${gallery
           .map(
@@ -181,7 +194,7 @@ function renderDetail() {
       <div class="sample-media-row">
         ${gallery
           .slice(0, 4)
-          .map((image) => `<img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)} sample" />`)
+          .map((image) => blendedImage(image, `${displayProduct.title} sample`, "sample-blend"))
           .join("")}
       </div>
     </section>
@@ -245,7 +258,7 @@ function setupScrollMotion() {
   animatedItems.forEach((item) => observer.observe(item));
 
   const hero = detail.querySelector(".apple-immersive-hero");
-  const heroImage = detail.querySelector(".apple-hero-visual img");
+  const heroImage = detail.querySelector(".apple-hero-visual .blend-media");
   const heroCopy = detail.querySelector(".apple-hero-copy");
 
   function updateHeroMotion() {
@@ -311,7 +324,9 @@ function addSelectedProduct() {
 detail.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
   if (thumb) {
-    document.querySelector("[data-main-image]").src = thumb.dataset.thumb;
+    const wrap = document.querySelector("[data-main-image-wrap]");
+    const label = product ? I18n.localizedProduct(product).title : "sample";
+    if (wrap) wrap.innerHTML = blendedImage(thumb.dataset.thumb, label);
     return;
   }
 
