@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" role="img" aria-label="NOIR CASE product motion sample">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#2b2419"/>
+      <stop offset="42%" stop-color="#0c0d0f"/>
+      <stop offset="100%" stop-color="#030304"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" x2="100%">
+      <stop offset="0%" stop-color="#8f6b2f"/>
+      <stop offset="50%" stop-color="#d5ad60"/>
+      <stop offset="100%" stop-color="#7d5a29"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <g opacity=".42" filter="url(#soft)">
+    <circle cx="710" cy="472" r="220" fill="#caa45e">
+      <animate attributeName="r" values="180;245;180" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".18;.38;.18" dur="7s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <g transform="translate(720 458)">
+    <animateTransform attributeName="transform" type="translate" values="720 458;720 430;720 458" dur="6s" repeatCount="indefinite"/>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" values="-5;5;-5" dur="6s" repeatCount="indefinite"/>
+      <rect x="-170" y="-300" width="340" height="600" rx="46" fill="#050506" stroke="#333" stroke-width="4"/>
+      <rect x="-137" y="-258" width="274" height="516" rx="32" fill="#101113"/>
+      <path d="M-92 -166 C-10 -228, 42 -83, 105 -142" fill="none" stroke="url(#gold)" stroke-width="16" stroke-linecap="round" opacity=".9">
+        <animate attributeName="stroke-dasharray" values="40 520;260 300;40 520" dur="5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M-110 86 C-32 18, 62 164, 112 66" fill="none" stroke="#4a4d52" stroke-width="24" stroke-linecap="round" opacity=".65">
+        <animate attributeName="stroke-dasharray" values="20 540;220 340;20 540" dur="6s" repeatCount="indefinite"/>
+      </path>
+      <rect x="-116" y="-230" width="102" height="34" rx="17" fill="#24262b"/>
+      <rect x="-116" y="-184" width="142" height="34" rx="17" fill="#191b1f"/>
+      <rect x="-116" y="198" width="232" height="34" rx="17" fill="#191b1f"/>
+    </g>
+  </g>
+  <g opacity=".75">
+    <line x1="164" y1="744" x2="530" y2="744" stroke="url(#gold)" stroke-width="2">
+      <animate attributeName="x2" values="240;530;240" dur="5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="910" y1="154" x2="1274" y2="154" stroke="url(#gold)" stroke-width="2">
+      <animate attributeName="x1" values="1180;910;1180" dur="5s" repeatCount="indefinite"/>
+    </line>
+  </g>
+</svg>
