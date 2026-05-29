@@ -13,8 +13,17 @@ const loginForm = document.querySelector("[data-admin-login]");
 const heroForm = document.querySelector("[data-hero-form]");
 const editorForm = document.querySelector("[data-admin-editor]");
 const orderList = document.querySelector("[data-order-list]");
+const assetLibrary = document.querySelector("[data-asset-library]");
 const logoutButton = document.querySelector("[data-logout]");
 const toast = document.querySelector("[data-toast]");
+
+const SAMPLE_ASSETS = [
+  { label: "대표 케이스 사진", path: "assets/sample-product-hero.png", type: "image" },
+  { label: "상세 연출 사진", path: "assets/sample-detail-scene.png", type: "image" },
+  { label: "배경화면 샘플 PNG", path: "assets/sample-wallpaper-black-gold.png", type: "image" },
+  { label: "배경화면 샘플 SVG", path: "assets/sample-wallpaper-midnight.svg", type: "image" },
+  { label: "상품 모션 샘플", path: "assets/sample-product-motion.svg", type: "motion" },
+];
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
@@ -169,6 +178,7 @@ function showWorkspace() {
   orderWorkspace.hidden = false;
   logoutButton.hidden = false;
   renderHeroSettings();
+  renderAssetLibrary();
   renderEditor();
   renderOrders();
 }
@@ -209,6 +219,29 @@ function renderHeroSettings() {
         .join("")}
     </div>
     <button class="primary-btn full" type="submit">메인 화면 설정 저장</button>
+  `;
+}
+
+function renderAssetLibrary() {
+  assetLibrary.innerHTML = `
+    <section class="sample-asset-panel">
+      <div>
+        <strong>샘플 자산</strong>
+        <p>아래 경로를 상품 이미지, 갤러리, 동영상, 디지털 파일 URL에 넣어 테스트할 수 있습니다.</p>
+      </div>
+      <div class="sample-asset-grid">
+        ${SAMPLE_ASSETS.map(
+          (asset) => `
+            <article>
+              <img src="${asset.path}" alt="${asset.label}" />
+              <span>${asset.label}</span>
+              <code>${asset.path}</code>
+              <button class="secondary-btn small-btn" type="button" data-copy-asset="${asset.path}">경로 복사</button>
+            </article>
+          `,
+        ).join("")}
+      </div>
+    </section>
   `;
 }
 
@@ -376,13 +409,13 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
     detail: "케이스, 배경화면, 위젯, 설치 가이드를 포함한 스타일링 세트입니다.",
     price: 79000,
     productType: "bundle",
-    image: "assets/case-aramid.png",
-    gallery: ["assets/case-aramid.png"],
-    video: "",
-    digitalFiles: [],
+    image: "assets/sample-product-hero.png",
+    gallery: ["assets/sample-product-hero.png", "assets/sample-detail-scene.png", "assets/sample-wallpaper-black-gold.png"],
+    video: "assets/sample-product-motion.svg",
+    digitalFiles: ["assets/sample-wallpaper-black-gold.png", "assets/sample-wallpaper-midnight.svg"],
     includedItems: ["케이스 1개", "배경화면 10종", "위젯 세팅 가이드"],
     storySections: [
-      { eyebrow: "Design", title: "케이스와 화면을 한 번에", body: "상품의 핵심 장점을 애플식 상세 페이지 흐름으로 보여주세요.", image: "assets/case-aramid.png" },
+      { eyebrow: "Design", title: "케이스와 화면을 한 번에", body: "상품의 핵심 장점을 애플식 상세 페이지 흐름으로 보여주세요.", image: "assets/sample-product-hero.png" },
     ],
     specs: [
       { label: "Set", value: "3", body: "포함 구성" },
@@ -401,6 +434,17 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
   renderHeroSettings();
   renderEditor();
   showToast("새 상품을 추가했습니다.");
+});
+
+assetLibrary.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-copy-asset]");
+  if (!button) return;
+  try {
+    await navigator.clipboard.writeText(button.dataset.copyAsset);
+    showToast("샘플 자산 경로를 복사했습니다.");
+  } catch (error) {
+    showToast(button.dataset.copyAsset);
+  }
 });
 
 document.querySelector("[data-reset-products]").addEventListener("click", () => {
