@@ -88,7 +88,9 @@ function renderDetail() {
     return;
   }
 
-  const gallery = Array.from(new Set([displayProduct.image, ...displayProduct.gallery, ...SAMPLE_GALLERY].filter(Boolean)));
+  const productGallery = Array.isArray(displayProduct.gallery) ? displayProduct.gallery.filter(Boolean) : [];
+  const hasCustomGallery = productGallery.some((image) => !SAMPLE_GALLERY.includes(image) && image !== displayProduct.image);
+  const gallery = Array.from(new Set([displayProduct.image, ...(hasCustomGallery ? productGallery : [...productGallery, ...SAMPLE_GALLERY])].filter(Boolean)));
   const options = optionList(displayProduct.optionText);
   const specs = displayProduct.specs && displayProduct.specs.length ? displayProduct.specs : [];
 
@@ -169,6 +171,19 @@ function renderDetail() {
 
     <section class="apple-video-section">
       ${renderMotionAsset(displayProduct)}
+    </section>
+
+    <section class="apple-sample-assets">
+      <div>
+        <p class="eyebrow">Sample Assets</p>
+        <h2>케이스와 화면 샘플</h2>
+      </div>
+      <div class="sample-media-row">
+        ${gallery
+          .slice(0, 4)
+          .map((image) => `<img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)} sample" />`)
+          .join("")}
+      </div>
     </section>
 
     <section class="apple-buy-section" id="buy">
