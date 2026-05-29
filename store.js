@@ -492,6 +492,12 @@
       maxSlides: 3,
       intervalSeconds: 5,
       selectedProductIds: defaultProducts.map((product) => product.id),
+      tone: 34,
+      imageBrightness: 78,
+      backgroundGlow: 22,
+      overlayStrength: 58,
+      textTop: 50,
+      imageScale: 100,
     };
   }
 
@@ -505,6 +511,12 @@
         maxSlides: Math.max(1, Number(parsed.maxSlides) || fallback.maxSlides),
         intervalSeconds: Math.max(2, Number(parsed.intervalSeconds) || fallback.intervalSeconds),
         selectedProductIds: Array.isArray(parsed.selectedProductIds) ? parsed.selectedProductIds : fallback.selectedProductIds,
+        tone: clampNumber(parsed.tone, fallback.tone, 0, 100),
+        imageBrightness: clampNumber(parsed.imageBrightness, fallback.imageBrightness, 35, 130),
+        backgroundGlow: clampNumber(parsed.backgroundGlow, fallback.backgroundGlow, 0, 80),
+        overlayStrength: clampNumber(parsed.overlayStrength, fallback.overlayStrength, 0, 100),
+        textTop: clampNumber(parsed.textTop, fallback.textTop, 35, 78),
+        imageScale: clampNumber(parsed.imageScale, fallback.imageScale, 70, 130),
       };
     } catch (error) {
       return fallback;
@@ -516,6 +528,12 @@
       maxSlides: Math.max(1, Number(settings.maxSlides) || 1),
       intervalSeconds: Math.max(2, Number(settings.intervalSeconds) || 5),
       selectedProductIds: Array.isArray(settings.selectedProductIds) ? settings.selectedProductIds : [],
+      tone: clampNumber(settings.tone, 34, 0, 100),
+      imageBrightness: clampNumber(settings.imageBrightness, 78, 35, 130),
+      backgroundGlow: clampNumber(settings.backgroundGlow, 22, 0, 80),
+      overlayStrength: clampNumber(settings.overlayStrength, 58, 0, 100),
+      textTop: clampNumber(settings.textTop, 50, 35, 78),
+      imageScale: clampNumber(settings.imageScale, 100, 70, 130),
     };
     localStorage.setItem(HERO_SETTINGS_KEY, JSON.stringify(nextSettings));
     remoteSetState("hero_settings", nextSettings).catch(() => {});
