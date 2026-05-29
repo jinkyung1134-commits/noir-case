@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상품 상세 | NOIR CASE</title>
+    <meta name="description" content="NOIR CASE 상품 상세 정보, 사진, 동영상, 옵션, 장바구니, 결제를 확인하세요." />
+    <meta property="og:title" content="NOIR CASE 상품 상세" />
+    <meta property="og:description" content="프리미엄 케이스와 화면 디자인 세트의 상세 정보를 확인하세요." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="NOIR CASE 홈">
+        <span class="brand-mark">N</span>
+        <span>NOIR CASE</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html#products" data-i18n="navProducts">스타일 세트</a>
+        <a href="index.html#quality" data-i18n="navQuality">품질</a>
+        <a href="admin.html" data-i18n="admin">관리자</a>
+      </nav>
+      <button class="admin-open" type="button" data-open-cart data-i18n="cart">장바구니</button>
+    </header>
+
+    <main class="detail-shell" data-detail></main>
+
+    <aside class="cart-drawer" data-cart-drawer aria-label="장바구니">
+      <div class="drawer-head">
+        <h2 data-i18n="orderSheet">주문서</h2>
+        <button class="icon-btn" type="button" data-close-cart aria-label="장바구니 닫기">×</button>
+      </div>
+      <div class="cart-items" data-cart-items></div>
+      <div class="cart-total">
+        <span>결제 예정 금액</span>
+        <strong data-cart-total>0원</strong>
+      </div>
+      <button class="checkout-btn" type="button" data-checkout data-i18n="checkout">결제하기</button>
+      <p class="checkout-note">현재는 데모 결제입니다. 실제 판매 전 PG 가맹점 심사와 서버 검증을 연결하세요.</p>
+    </aside>
+
+    <button class="cart-fab" type="button" data-floating-cart aria-label="장바구니 열기">
+      <span>Cart</span>
+      <strong data-cart-count>0</strong>
+    </button>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="store.js"></script>
+    <script src="product.js"></script>
+  </body>
+</html>
