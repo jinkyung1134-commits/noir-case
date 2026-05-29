@@ -49,6 +49,17 @@ function emptyMessage() {
   return "No products match your filters.";
 }
 
+function blendedImage(src, alt, className = "") {
+  const image = escapeHtml(src);
+  const label = escapeHtml(alt);
+  return `
+    <span class="blend-media ${className}" style="--blend-image: url('${image}')">
+      <span class="blend-media-bg" aria-hidden="true"></span>
+      <img src="${image}" alt="${label}" />
+    </span>
+  `;
+}
+
 function defaultOption() {
   if (I18n.current() === "ko") return "기본 옵션";
   if (I18n.current() === "zh") return "默认选项";
@@ -71,7 +82,7 @@ function renderProducts() {
             <article class="product-card">
               <a class="product-link" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="${escapeHtml(product.title)} 상세 보기">
                 <div class="product-media">
-                  <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
+                  ${blendedImage(product.image, product.title)}
                   <span class="product-badge">${escapeHtml(product.badge)}</span>
                 </div>
                 <div class="product-info">
