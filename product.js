@@ -161,11 +161,7 @@ function renderDetail() {
     </section>
 
     <section class="apple-video-section">
-      ${
-        displayProduct.video
-          ? `<video class="detail-video" src="${escapeHtml(displayProduct.video)}" controls playsinline preload="metadata"></video>`
-          : `<div class="video-empty">${I18n.t("noVideo")}</div>`
-      }
+      ${renderMotionAsset(displayProduct)}
     </section>
 
     <section class="apple-buy-section" id="buy">
@@ -201,6 +197,14 @@ function renderDetail() {
     </div>
   `;
   requestAnimationFrame(setupScrollMotion);
+}
+
+function renderMotionAsset(product) {
+  if (!product.video) return `<div class="video-empty">${I18n.t("noVideo")}</div>`;
+  if (String(product.video).toLowerCase().endsWith(".svg")) {
+    return `<img class="detail-video motion-preview" src="${escapeHtml(product.video)}" alt="${escapeHtml(product.title)} motion preview" />`;
+  }
+  return `<video class="detail-video" src="${escapeHtml(product.video)}" controls playsinline preload="metadata"></video>`;
 }
 
 function setupScrollMotion() {
