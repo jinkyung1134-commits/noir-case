@@ -322,6 +322,13 @@
     remoteSetState("products", normalized).catch(() => {});
   }
 
+  async function publishProducts(products) {
+    const normalized = products.map(normalizeProduct);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    await remoteSetState("products", normalized);
+    return normalized;
+  }
+
   function resetProducts() {
     saveProducts(defaultProducts);
     return loadProducts();
@@ -515,6 +522,14 @@
   function normalizeHeroSlide(slide = {}, fallback = {}) {
     return {
       productId: slide.productId || fallback.productId || "",
+      eyebrow: slide.eyebrow || "",
+      title: slide.title || "",
+      subtitle: slide.subtitle || "",
+      image: slide.image || "",
+      backgroundColor: slide.backgroundColor || fallback.backgroundColor || "#050506",
+      backgroundEndColor: slide.backgroundEndColor || fallback.backgroundEndColor || "#111214",
+      accentColor: slide.accentColor || fallback.accentColor || "#b9975b",
+      textColor: slide.textColor || fallback.textColor || "#f7f3ea",
       tone: clampNumber(slide.tone, fallback.tone ?? 34, 0, 100),
       imageBrightness: clampNumber(slide.imageBrightness, fallback.imageBrightness ?? 78, 35, 150),
       backgroundGlow: clampNumber(slide.backgroundGlow, fallback.backgroundGlow ?? 22, 0, 100),
@@ -571,6 +586,13 @@
     return nextSettings;
   }
 
+  async function publishHeroSettings(settings) {
+    const nextSettings = normalizeHeroSettings(settings);
+    localStorage.setItem(HERO_SETTINGS_KEY, JSON.stringify(nextSettings));
+    await remoteSetState("hero_settings", nextSettings);
+    return nextSettings;
+  }
+
   async function syncFromRemote() {
     if (!remoteReady()) return false;
     const [remoteProducts, remoteOrders, remoteHeroSettings] = await Promise.all([
@@ -592,6 +614,7 @@
     defaultProducts,
     loadProducts,
     saveProducts,
+    publishProducts,
     resetProducts,
     activeProducts,
     findProduct,
@@ -612,5 +635,6 @@
     syncFromRemote,
     loadHeroSettings,
     saveHeroSettings,
+    publishHeroSettings,
   };
 })();
