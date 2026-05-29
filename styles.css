@@ -338,12 +338,16 @@ h2 {
   background: #090909;
 }
 
-.product-media img {
+.product-media > img,
+.product-media .blend-media {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
   transition: transform 360ms ease;
+}
+
+.product-media .blend-media img {
+  object-fit: cover;
 }
 
 .product-card:hover img {
@@ -923,6 +927,43 @@ textarea {
   background: transparent;
 }
 
+.blend-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  --blend-image: none;
+}
+
+.blend-media-bg {
+  position: absolute;
+  inset: -18%;
+  z-index: -1;
+  background-image: var(--blend-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(34px) saturate(1.05);
+  opacity: 0.64;
+  transform: scale(1.1);
+}
+
+.blend-media img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-composite: intersect;
+}
+
 .admin-fields label:nth-child(5),
 .admin-fields label:nth-child(6),
 .admin-fields label:nth-child(7),
@@ -1215,11 +1256,15 @@ textarea {
 .detail-main-image {
   width: 100%;
   aspect-ratio: 1 / 1;
-  object-fit: contain;
   border: 0 !important;
   outline: 0 !important;
   box-shadow: none;
   background: transparent !important;
+}
+
+.detail-main-image .blend-media {
+  width: 100%;
+  height: 100%;
 }
 
 .detail-thumbs {
@@ -1324,6 +1369,16 @@ textarea {
   width: min(92vw, 900px);
   max-height: 58vh;
   object-fit: contain;
+  filter: drop-shadow(0 44px 80px rgba(0, 0, 0, 0.58));
+}
+
+.apple-hero-visual .blend-media {
+  width: min(92vw, 900px);
+  max-height: 58vh;
+  aspect-ratio: 4 / 3;
+}
+
+.apple-hero-visual .blend-media img {
   filter: drop-shadow(0 44px 80px rgba(0, 0, 0, 0.58));
 }
 
@@ -1432,6 +1487,15 @@ textarea {
   filter: drop-shadow(0 34px 56px rgba(0, 0, 0, 0.44));
 }
 
+.apple-story-media .blend-media {
+  width: min(100%, 780px);
+  aspect-ratio: 4 / 3;
+}
+
+.apple-story-media .blend-media img {
+  filter: drop-shadow(0 34px 56px rgba(0, 0, 0, 0.44));
+}
+
 .apple-sample-assets {
   width: min(1180px, 100%);
   margin: 0 auto;
@@ -1451,12 +1515,15 @@ textarea {
   gap: clamp(12px, 2vw, 22px);
 }
 
-.sample-media-row img {
+.sample-media-row .blend-media {
   width: 100%;
   aspect-ratio: 4 / 5;
-  object-fit: cover;
   border: 0;
   background: transparent;
+}
+
+.sample-media-row img {
+  object-fit: cover;
   filter: drop-shadow(0 24px 46px rgba(0, 0, 0, 0.34));
 }
 
@@ -1728,6 +1795,13 @@ textarea {
     max-height: 44vh;
   }
 
+  .apple-hero-visual .blend-media {
+    position: sticky;
+    top: 284px;
+    width: min(100%, 520px);
+    max-height: 44vh;
+  }
+
   .apple-overview-strip article,
   .apple-spec-showcase article {
     border-right: 0;
@@ -1774,6 +1848,10 @@ textarea {
   }
 
   .apple-story-media img {
+    max-height: 42vh;
+  }
+
+  .apple-story-media .blend-media {
     max-height: 42vh;
   }
 
