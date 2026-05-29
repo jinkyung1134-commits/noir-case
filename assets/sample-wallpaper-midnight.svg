@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1170 2532" role="img" aria-label="Midnight gold wallpaper sample">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#2d261a"/>
+      <stop offset="48%" stop-color="#101113"/>
+      <stop offset="100%" stop-color="#020203"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0%" x2="100%">
+      <stop offset="0%" stop-color="#7d5a29"/>
+      <stop offset="50%" stop-color="#d6af63"/>
+      <stop offset="100%" stop-color="#5f431f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1170" height="2532" fill="url(#glow)"/>
+  <g opacity=".9" fill="none" stroke="url(#line)" stroke-width="12" stroke-linecap="round">
+    <path d="M-120 710 C180 520 282 1080 640 846 S1002 1124 1290 862"/>
+    <path d="M-90 1540 C240 1300 358 1906 702 1660 S1036 1848 1280 1580" opacity=".56"/>
+  </g>
+  <g opacity=".18" fill="#fff">
+    <circle cx="860" cy="420" r="4"/>
+    <circle cx="224" cy="812" r="3"/>
+    <circle cx="948" cy="1398" r="5"/>
+    <circle cx="430" cy="2046" r="3"/>
+  </g>
+</svg>
