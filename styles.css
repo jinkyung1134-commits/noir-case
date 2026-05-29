@@ -122,9 +122,24 @@ a {
   align-items: center;
   overflow: hidden;
   padding: 120px clamp(18px, 6vw, 84px) 70px;
+  --hero-image: url("assets/hero-case.png");
   background:
     radial-gradient(circle at 78% 46%, rgba(185, 151, 91, 0.12), transparent 34%),
     linear-gradient(90deg, #050506 0%, #08090a 48%, #111214 100%);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -24%;
+  z-index: 0;
+  background-image: var(--hero-image);
+  background-size: min(78vw, 1080px) auto;
+  background-repeat: no-repeat;
+  background-position: center right;
+  filter: blur(96px) saturate(0.95) brightness(0.56);
+  opacity: 0.86;
+  transform: scale(1.16);
 }
 
 .hero-bg,
@@ -140,7 +155,9 @@ a {
   height: calc(100% - 152px);
   object-fit: contain;
   object-position: center right;
-  filter: saturate(0.9) contrast(1.08);
+  filter: saturate(0.9) contrast(1.08) drop-shadow(0 32px 72px rgba(0, 0, 0, 0.58));
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 48%, rgba(0, 0, 0, 0.78) 62%, rgba(0, 0, 0, 0.2) 78%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 0%, #000 48%, rgba(0, 0, 0, 0.78) 62%, rgba(0, 0, 0, 0.2) 78%, transparent 100%);
 }
 
 .hero-shade {
@@ -938,14 +955,23 @@ textarea {
 
 .blend-media-bg {
   position: absolute;
-  inset: -18%;
+  inset: -38%;
   z-index: -1;
   background-image: var(--blend-image);
   background-size: cover;
   background-position: center;
-  filter: blur(34px) saturate(1.05);
-  opacity: 0.64;
-  transform: scale(1.1);
+  filter: blur(78px) saturate(1.12) brightness(0.82);
+  opacity: 0.96;
+  transform: scale(1.24);
+}
+
+.blend-media::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 0%, transparent 48%, rgba(5, 5, 6, 0.18) 66%, rgba(5, 5, 6, 0.64) 86%, #050506 100%);
 }
 
 .blend-media img {
@@ -954,14 +980,8 @@ textarea {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%),
-    linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
-  mask-composite: intersect;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, #000 54%, rgba(0, 0, 0, 0.76) 68%, rgba(0, 0, 0, 0.24) 82%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 0%, #000 54%, rgba(0, 0, 0, 0.76) 68%, rgba(0, 0, 0, 0.24) 82%, transparent 100%);
 }
 
 .admin-fields label:nth-child(5),
@@ -1488,7 +1508,7 @@ textarea {
 }
 
 .apple-story-media .blend-media {
-  width: min(100%, 780px);
+  width: min(112%, 860px);
   aspect-ratio: 4 / 3;
 }
 
