@@ -6,6 +6,13 @@ const cartItems = document.querySelector("[data-cart-items]");
 const cartTotal = document.querySelector("[data-cart-total]");
 const cartCount = document.querySelector("[data-cart-count]");
 const toast = document.querySelector("[data-toast]");
+const SAMPLE_GALLERY = [
+  "assets/sample-product-hero.png",
+  "assets/sample-detail-scene.png",
+  "assets/sample-wallpaper-black-gold.png",
+  "assets/sample-wallpaper-midnight.svg",
+];
+const SAMPLE_MOTION = "assets/sample-product-motion.svg";
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
@@ -81,7 +88,7 @@ function renderDetail() {
     return;
   }
 
-  const gallery = Array.from(new Set([displayProduct.image, ...displayProduct.gallery].filter(Boolean)));
+  const gallery = Array.from(new Set([displayProduct.image, ...displayProduct.gallery, ...SAMPLE_GALLERY].filter(Boolean)));
   const options = optionList(displayProduct.optionText);
   const specs = displayProduct.specs && displayProduct.specs.length ? displayProduct.specs : [];
 
@@ -200,11 +207,11 @@ function renderDetail() {
 }
 
 function renderMotionAsset(product) {
-  if (!product.video) return `<div class="video-empty">${I18n.t("noVideo")}</div>`;
-  if (String(product.video).toLowerCase().endsWith(".svg")) {
-    return `<img class="detail-video motion-preview" src="${escapeHtml(product.video)}" alt="${escapeHtml(product.title)} motion preview" />`;
+  const source = product.video || SAMPLE_MOTION;
+  if (String(source).toLowerCase().endsWith(".svg")) {
+    return `<img class="detail-video motion-preview" src="${escapeHtml(source)}" alt="${escapeHtml(product.title)} motion preview" />`;
   }
-  return `<video class="detail-video" src="${escapeHtml(product.video)}" controls playsinline preload="metadata"></video>`;
+  return `<video class="detail-video" src="${escapeHtml(source)}" controls playsinline preload="metadata"></video>`;
 }
 
 function setupScrollMotion() {
