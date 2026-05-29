@@ -104,12 +104,20 @@ function applyHeroSettings(settings = heroSettings) {
   const overlay = Number(settings.overlayStrength ?? 58);
   const textTop = Number(settings.textTop ?? 50);
   const imageScale = Number(settings.imageScale ?? 100);
+  const backgroundColor = settings.backgroundColor || "#050506";
+  const backgroundEndColor = settings.backgroundEndColor || "#111214";
+  const accentColor = settings.accentColor || "#b9975b";
+  const textColor = settings.textColor || "#f7f3ea";
   heroSection.style.setProperty("--hero-tone", tone / 100);
   heroSection.style.setProperty("--hero-image-brightness", brightness / 100);
   heroSection.style.setProperty("--hero-bg-opacity", glow / 100);
   heroSection.style.setProperty("--hero-overlay", overlay / 100);
   heroSection.style.setProperty("--hero-content-y", `${textTop}%`);
   heroSection.style.setProperty("--hero-art-scale", imageScale / 100);
+  heroSection.style.setProperty("--hero-bg-start", backgroundColor);
+  heroSection.style.setProperty("--hero-bg-end", backgroundEndColor);
+  heroSection.style.setProperty("--hero-accent", accentColor);
+  heroSection.style.setProperty("--hero-text", textColor);
 }
 
 function defaultOption() {
@@ -175,14 +183,20 @@ function renderHero() {
   const rawProduct = slide.product;
   const product = I18n.localizedProduct(rawProduct);
   const blend = { ...rawProduct.mediaBlend, ...(slide.mediaBlend || {}) };
-  heroImage.src = product.image;
-  heroImage.alt = product.title;
-  heroSection.style.setProperty("--hero-image", `url('${product.image}')`);
+  const display = {
+    image: slide.image || product.image,
+    eyebrow: slide.eyebrow || product.category || "Phone Styling Set",
+    title: slide.title || product.title,
+    subtitle: slide.subtitle || product.subtitle,
+  };
+  heroImage.src = display.image;
+  heroImage.alt = display.title;
+  heroSection.style.setProperty("--hero-image", `url('${display.image}')`);
   applyHeroSettings(slide);
   applyBlendStyle(heroSection, blend);
-  heroCategory.textContent = product.category || "Phone Styling Set";
-  heroTitle.textContent = product.title;
-  heroCopy.textContent = product.subtitle;
+  heroCategory.textContent = display.eyebrow;
+  heroTitle.textContent = display.title;
+  heroCopy.textContent = display.subtitle;
   heroPrice.textContent = ProductStore.formatWon(product.price);
   heroDetail.href = `product.html?id=${encodeURIComponent(product.id)}`;
   heroDetail.textContent = I18n.t("detail");
