@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 | NOIR CASE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="NOIR CASE 홈">
+        <span class="brand-mark">N</span>
+        <span>NOIR CASE</span>
+      </a>
+      <nav class="nav-links" aria-label="관리 메뉴">
+        <a href="index.html">쇼핑몰 보기</a>
+        <a href="#hero-admin">메인 화면</a>
+        <a href="#products-admin">상품 관리</a>
+        <a href="#orders-admin">주문 관리</a>
+      </nav>
+      <button class="admin-open" type="button" data-logout hidden>로그아웃</button>
+    </header>
+
+    <main class="admin-shell">
+      <section class="admin-hero">
+        <p class="eyebrow">Admin Console</p>
+        <h1>메인 화면과 상품을 관리자에서 운영합니다</h1>
+        <p>
+          상품을 등록하고, 어떤 상품을 첫 화면에 보여줄지 선택하세요.
+          선택한 상품은 메인 화면에서 자동으로 전환되고 고객이 직접 이전/다음으로 넘길 수 있습니다.
+        </p>
+      </section>
+
+      <section class="admin-login-card" data-login-card>
+        <h2>관리자 로그인</h2>
+        <form class="login-form" data-admin-login>
+          <label>
+            비밀번호
+            <input type="password" name="password" placeholder="관리자 비밀번호" autocomplete="current-password" />
+          </label>
+          <button class="primary-btn full" type="submit">접속</button>
+          <p class="form-help">초기 비밀번호: BLACKCASE2026</p>
+        </form>
+      </section>
+
+      <section class="admin-workspace" id="hero-admin" data-hero-workspace hidden>
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Main Display</p>
+            <h2>메인 화면 설정</h2>
+          </div>
+        </div>
+        <form class="hero-admin-form" data-hero-form></form>
+      </section>
+
+      <section class="admin-workspace order-workspace" id="products-admin" data-admin-workspace hidden>
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Products</p>
+            <h2>상품 관리</h2>
+          </div>
+          <div class="editor-actions">
+            <button class="secondary-btn" type="button" data-add-product>새 상품</button>
+            <button class="danger-btn" type="button" data-reset-products>초기화</button>
+          </div>
+        </div>
+
+        <form class="editor-form" data-admin-editor></form>
+      </section>
+
+      <section class="admin-workspace order-workspace" id="orders-admin" data-order-workspace hidden>
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Orders</p>
+            <h2>주문 관리</h2>
+          </div>
+        </div>
+        <div class="order-list" data-order-list></div>
+      </section>
+    </main>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="store.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
