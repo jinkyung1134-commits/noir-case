@@ -4,6 +4,7 @@ const ORDER_STATUSES = ["주문 접수", "결제 완료", "배송 준비", "배�
 
 let products = ProductStore.loadProducts();
 let heroSettings = ProductStore.loadHeroSettings();
+let selectedProductId = products[0] ? products[0].id : "";
 
 const loginCard = document.querySelector("[data-login-card]");
 const workspace = document.querySelector("[data-admin-workspace]");
@@ -278,7 +279,6 @@ function showWorkspace() {
   orderWorkspace.hidden = false;
   logoutButton.hidden = false;
   renderHeroSettings();
-  renderAssetLibrary();
   renderEditor();
   renderOrders();
 }
@@ -300,6 +300,24 @@ function renderHeroSettings() {
       </label>
       <label>자동 전환 시간(초)
         <input name="intervalSeconds" type="number" min="2" step="1" value="${heroSettings.intervalSeconds}" />
+      </label>
+      <label>메인 화면 밝기
+        <input name="tone" type="range" min="0" max="100" value="${heroSettings.tone ?? 34}" />
+      </label>
+      <label>상품 이미지 밝기
+        <input name="imageBrightness" type="range" min="35" max="130" value="${heroSettings.imageBrightness ?? 78}" />
+      </label>
+      <label>배경 확산 강도
+        <input name="backgroundGlow" type="range" min="0" max="80" value="${heroSettings.backgroundGlow ?? 22}" />
+      </label>
+      <label>검은 오버레이
+        <input name="overlayStrength" type="range" min="0" max="100" value="${heroSettings.overlayStrength ?? 58}" />
+      </label>
+      <label>글 위치
+        <input name="textTop" type="range" min="35" max="78" value="${heroSettings.textTop ?? 50}" />
+      </label>
+      <label>상품 이미지 크기
+        <input name="imageScale" type="range" min="70" max="130" value="${heroSettings.imageScale ?? 100}" />
       </label>
     </div>
     <div class="featured-product-list">
@@ -323,6 +341,7 @@ function renderHeroSettings() {
 }
 
 function renderAssetLibrary() {
+  if (!assetLibrary) return;
   assetLibrary.innerHTML = `
     <section class="sample-asset-panel">
       <div>
@@ -375,132 +394,158 @@ function renderOrders() {
 }
 
 function renderEditor() {
-  editorForm.innerHTML = products
-    .map(
-      (product, index) => `
-        <fieldset class="product-editor">
-          <legend>${index + 1}번 상품</legend>
-          <div class="admin-product-layout">
-            <div class="admin-preview">
-              <span class="blend-media admin-preview-media" style="${adminBlendStyle(product)}">
-                <span class="blend-media-bg" aria-hidden="true"></span>
-                <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
-              </span>
-              <span class="admin-preview-status">${product.status === "hidden" ? "숨김" : "노출중"}</span>
-            </div>
-            <div class="admin-fields">
-              <details class="admin-edit-group" open>
-                <summary>기본 정보</summary>
-                <div class="admin-group-grid">
-              <div class="admin-section-note">
-                <strong>한국어 기본 정보</strong>
-                <span>한국어 페이지와 번역이 비어 있는 언어의 기본값으로 사용됩니다.</span>
-              </div>
-              <label>상품명
-                <input name="title-${index}" value="${escapeHtml(product.title)}" />
-              </label>
-              <label>가격
-                <input name="price-${index}" type="number" min="0" step="1000" value="${product.price}" />
-                <small>표시 가격: ${ProductStore.formatPrice(product.price)}</small>
-              </label>
-              <label>카테고리
-                <select name="category-${index}">
-                  ${["Style Sets", "Cases", "Wallpapers", "Widgets"].map(
-                    (category) => `<option value="${category}" ${product.category === category ? "selected" : ""}>${category}</option>`,
-                  ).join("")}
-                </select>
-              </label>
-              <label>상품 타입
-                <select name="productType-${index}">
-                  <option value="bundle" ${product.productType === "bundle" ? "selected" : ""}>스타일 세트</option>
-                  <option value="case" ${product.productType === "case" ? "selected" : ""}>케이스</option>
-                  <option value="digital" ${product.productType === "digital" ? "selected" : ""}>화면 디자인</option>
-                </select>
-              </label>
-              <label>배송 유형
-                <select name="deliveryType-${index}">
-                  <option value="both" ${product.deliveryType === "both" ? "selected" : ""}>배송 + 디지털</option>
-                  <option value="shipping" ${product.deliveryType === "shipping" ? "selected" : ""}>배송 상품</option>
-                  <option value="digital" ${product.deliveryType === "digital" ? "selected" : ""}>디지털 다운로드</option>
-                </select>
-              </label>
-              <label>배지
-                <input name="badge-${index}" value="${escapeHtml(product.badge)}" />
-              </label>
-              <label>짧은 설명
-                <textarea name="subtitle-${index}">${escapeHtml(product.subtitle)}</textarea>
-              </label>
-              <label>상세 설명
-                <textarea name="detail-${index}">${escapeHtml(product.detail)}</textarea>
-              </label>
-              <label>상세 소개 섹션
-                <textarea name="storySections-${index}" placeholder="eyebrow | title | body | image">${escapeHtml(formatStorySections(product.storySections))}</textarea>
-              </label>
-              <label>강조 스펙
-                <textarea name="specs-${index}" placeholder="label | value | body">${escapeHtml(formatSpecs(product.specs))}</textarea>
-              </label>
-              <label>포함 구성
-                <textarea name="includedItems-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.includedItems.join("\n"))}</textarea>
-              </label>
-                </div>
-              </details>
-              <details class="admin-edit-group" open>
-                <summary>사진/영상 업로드</summary>
-                <div class="admin-group-grid">
-              <label>대표 이미지 주소
-                <input name="image-${index}" value="${escapeHtml(product.image)}" />
-              </label>
-              <label>대표 사진 업로드
-                <input name="file-${index}" type="file" accept="image/*" />
-              </label>
-              <label>갤러리 이미지 주소
-                <textarea name="gallery-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.gallery.join("\n"))}</textarea>
-              </label>
-              <label>갤러리 사진 여러 장 업로드
-                <input name="galleryFiles-${index}" type="file" accept="image/*" multiple />
-              </label>
-              <label>상품 동영상 주소
-                <input name="video-${index}" value="${escapeHtml(product.video)}" placeholder="mp4 주소 또는 업로드 사용" />
-              </label>
-              <label>상품 동영상 업로드
-                <input name="videoFile-${index}" type="file" accept="video/*" />
-              </label>
-              <label>디지털 파일 URL
-                <textarea name="digitalFiles-${index}" placeholder="결제 후 제공할 파일 URL">${escapeHtml(product.digitalFiles.join("\n"))}</textarea>
-              </label>
-              <label>디지털 파일 업로드
-                <input name="digitalFileUploads-${index}" type="file" multiple />
-              </label>
-              ${renderBlendControls(product, index)}
-                </div>
-              </details>
-              <details class="admin-edit-group">
-                <summary>옵션/번역/노출</summary>
-                <div class="admin-group-grid">
-              <label>옵션
-                <textarea name="optionText-${index}" placeholder="iPhone 15, Galaxy S24">${escapeHtml(product.optionText)}</textarea>
-              </label>
-              ${renderLanguageFields(product, index)}
-              <label>재고
-                <input name="stock-${index}" type="number" min="0" step="1" value="${product.stock}" />
-              </label>
-              <label>노출 상태
-                <select name="status-${index}">
-                  <option value="active" ${product.status !== "hidden" ? "selected" : ""}>메인에 노출</option>
-                  <option value="hidden" ${product.status === "hidden" ? "selected" : ""}>숨김</option>
-                </select>
-              </label>
-                </div>
-              </details>
-            </div>
-          </div>
-          <button class="danger-btn compact" type="button" data-delete-product="${index}">이 상품 삭제</button>
-        </fieldset>
-      `,
-    )
-    .join("");
+  if (!products.length) {
+    editorForm.innerHTML = `<p class="checkout-note">등록된 상품이 없습니다. 새 상품을 먼저 추가하세요.</p>`;
+    return;
+  }
 
-  editorForm.insertAdjacentHTML("beforeend", `<button class="primary-btn full" type="submit">전체 변경 저장</button>`);
+  if (!products.some((product) => product.id === selectedProductId)) selectedProductId = products[0].id;
+  const index = products.findIndex((product) => product.id === selectedProductId);
+  const product = products[index];
+
+  editorForm.innerHTML = `
+    <div class="product-manager">
+      <aside class="product-picker" aria-label="상품 목록">
+        ${products
+          .map(
+            (item) => `
+              <button class="${item.id === selectedProductId ? "active" : ""}" type="button" data-select-product="${escapeHtml(item.id)}">
+                <img src="${escapeHtml(item.image)}" alt="" />
+                <span>
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <small>${escapeHtml(item.category)} · ${item.status === "hidden" ? "숨김" : "노출중"}</small>
+                </span>
+              </button>
+            `,
+          )
+          .join("")}
+      </aside>
+
+      <fieldset class="product-editor">
+        <legend>${escapeHtml(product.title)}</legend>
+        <div class="admin-product-layout">
+          <div class="admin-preview">
+            <span class="blend-media admin-preview-media" style="${adminBlendStyle(product)}">
+              <span class="blend-media-bg" aria-hidden="true"></span>
+              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
+            </span>
+            <span class="admin-preview-status">${product.status === "hidden" ? "숨김" : "노출중"}</span>
+          </div>
+          <div class="admin-fields">
+            <details class="admin-edit-group" open>
+              <summary>기본 정보</summary>
+              <div class="admin-group-grid">
+                <div class="admin-section-note">
+                  <strong>한국어 기본 정보</strong>
+                  <span>상품명, 가격, 설명처럼 쇼핑몰에 바로 보이는 핵심 정보입니다.</span>
+                </div>
+                <label>상품명
+                  <input name="title-${index}" value="${escapeHtml(product.title)}" />
+                </label>
+                <label>가격
+                  <input name="price-${index}" type="number" min="0" step="1000" value="${product.price}" />
+                  <small>표시 가격: ${ProductStore.formatPrice(product.price)}</small>
+                </label>
+                <label>카테고리
+                  <select name="category-${index}">
+                    ${["Style Sets", "Cases", "Wallpapers", "Widgets"].map(
+                      (category) => `<option value="${category}" ${product.category === category ? "selected" : ""}>${category}</option>`,
+                    ).join("")}
+                  </select>
+                </label>
+                <label>상품 타입
+                  <select name="productType-${index}">
+                    <option value="bundle" ${product.productType === "bundle" ? "selected" : ""}>스타일 세트</option>
+                    <option value="case" ${product.productType === "case" ? "selected" : ""}>케이스</option>
+                    <option value="digital" ${product.productType === "digital" ? "selected" : ""}>화면 디자인</option>
+                  </select>
+                </label>
+                <label>배송 유형
+                  <select name="deliveryType-${index}">
+                    <option value="both" ${product.deliveryType === "both" ? "selected" : ""}>배송 + 디지털</option>
+                    <option value="shipping" ${product.deliveryType === "shipping" ? "selected" : ""}>배송 상품</option>
+                    <option value="digital" ${product.deliveryType === "digital" ? "selected" : ""}>디지털 다운로드</option>
+                  </select>
+                </label>
+                <label>배지
+                  <input name="badge-${index}" value="${escapeHtml(product.badge)}" />
+                </label>
+                <label>짧은 설명
+                  <textarea name="subtitle-${index}">${escapeHtml(product.subtitle)}</textarea>
+                </label>
+                <label>상세 설명
+                  <textarea name="detail-${index}">${escapeHtml(product.detail)}</textarea>
+                </label>
+                <label>상세 소개 섹션
+                  <textarea name="storySections-${index}" placeholder="eyebrow | title | body | image">${escapeHtml(formatStorySections(product.storySections))}</textarea>
+                </label>
+                <label>강조 스펙
+                  <textarea name="specs-${index}" placeholder="label | value | body">${escapeHtml(formatSpecs(product.specs))}</textarea>
+                </label>
+                <label>포함 구성
+                  <textarea name="includedItems-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.includedItems.join("\n"))}</textarea>
+                </label>
+              </div>
+            </details>
+
+            <details class="admin-edit-group" open>
+              <summary>사진/영상 업로드</summary>
+              <div class="admin-group-grid">
+                <label>대표 이미지 주소
+                  <input name="image-${index}" value="${escapeHtml(product.image)}" />
+                </label>
+                <label>대표 사진 업로드
+                  <input name="file-${index}" type="file" accept="image/*" />
+                </label>
+                <label>갤러리 이미지 주소
+                  <textarea name="gallery-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.gallery.join("\n"))}</textarea>
+                </label>
+                <label>갤러리 사진 여러 장 업로드
+                  <input name="galleryFiles-${index}" type="file" accept="image/*" multiple />
+                </label>
+                <label>상품 동영상 주소
+                  <input name="video-${index}" value="${escapeHtml(product.video)}" placeholder="mp4 주소 또는 업로드 사용" />
+                </label>
+                <label>상품 동영상 업로드
+                  <input name="videoFile-${index}" type="file" accept="video/*" />
+                </label>
+                <label>디지털 파일 URL
+                  <textarea name="digitalFiles-${index}" placeholder="결제 후 제공할 파일 URL">${escapeHtml(product.digitalFiles.join("\n"))}</textarea>
+                </label>
+                <label>디지털 파일 업로드
+                  <input name="digitalFileUploads-${index}" type="file" multiple />
+                </label>
+                ${renderBlendControls(product, index)}
+              </div>
+            </details>
+
+            <details class="admin-edit-group">
+              <summary>옵션/번역/노출</summary>
+              <div class="admin-group-grid">
+                <label>옵션
+                  <textarea name="optionText-${index}" placeholder="iPhone 15, Galaxy S24">${escapeHtml(product.optionText)}</textarea>
+                </label>
+                ${renderLanguageFields(product, index)}
+                <label>재고
+                  <input name="stock-${index}" type="number" min="0" step="1" value="${product.stock}" />
+                </label>
+                <label>노출 상태
+                  <select name="status-${index}">
+                    <option value="active" ${product.status !== "hidden" ? "selected" : ""}>메인에 노출</option>
+                    <option value="hidden" ${product.status === "hidden" ? "selected" : ""}>숨김</option>
+                  </select>
+                </label>
+              </div>
+            </details>
+          </div>
+        </div>
+        <div class="editor-actions bottom-actions">
+          <button class="danger-btn compact" type="button" data-delete-product="${index}">이 상품 삭제</button>
+          <button class="primary-btn compact" type="submit">선택 상품 저장</button>
+        </div>
+      </fieldset>
+    </div>
+  `;
 }
 
 loginForm.addEventListener("submit", (event) => {
@@ -521,7 +566,7 @@ logoutButton.addEventListener("click", () => {
 });
 
 document.querySelector("[data-add-product]").addEventListener("click", () => {
-  products.unshift({
+  const newProduct = {
     id: "custom-" + Date.now(),
     title: "새 스타일 세트",
     subtitle: "케이스와 화면 디자인을 한 번에 맞춘 세트입니다.",
@@ -549,7 +594,9 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
     status: "active",
     mediaBlend: { enabled: true, focusX: 56, focusY: 52, width: 76, height: 70, fade: 18, blur: 48, glow: 22 },
     i18n: {},
-  });
+  };
+  products.unshift(newProduct);
+  selectedProductId = newProduct.id;
   ProductStore.saveProducts(products);
   renderHeroSettings();
   renderEditor();
@@ -582,16 +629,30 @@ heroForm.addEventListener("submit", (event) => {
     maxSlides: data.get("maxSlides"),
     intervalSeconds: data.get("intervalSeconds"),
     selectedProductIds: data.getAll("selectedProductIds"),
+    tone: data.get("tone"),
+    imageBrightness: data.get("imageBrightness"),
+    backgroundGlow: data.get("backgroundGlow"),
+    overlayStrength: data.get("overlayStrength"),
+    textTop: data.get("textTop"),
+    imageScale: data.get("imageScale"),
   });
   renderHeroSettings();
   showToast("메인 화면 설정을 저장했습니다.");
 });
 
 editorForm.addEventListener("click", (event) => {
+  const selectButton = event.target.closest("[data-select-product]");
+  if (selectButton) {
+    selectedProductId = selectButton.dataset.selectProduct;
+    renderEditor();
+    return;
+  }
+
   const deleteButton = event.target.closest("[data-delete-product]");
   if (!deleteButton) return;
 
   products.splice(Number(deleteButton.dataset.deleteProduct), 1);
+  selectedProductId = products[0] ? products[0].id : "";
   ProductStore.saveProducts(products);
   heroSettings = ProductStore.saveHeroSettings({
     ...heroSettings,
@@ -618,8 +679,14 @@ editorForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(editorForm);
   const nextProducts = [];
+  const selectedIndex = products.findIndex((product) => product.id === selectedProductId);
 
   for (let index = 0; index < products.length; index += 1) {
+    if (index !== selectedIndex) {
+      nextProducts.push(products[index]);
+      continue;
+    }
+
     const imageUpload = data.get(`file-${index}`);
     const uploadedImage = imageUpload && imageUpload.size > 0 ? await ProductStore.uploadAsset(imageUpload, "products") : "";
     const galleryUploads = await uploadFiles(data.getAll(`galleryFiles-${index}`), "products");
@@ -657,7 +724,7 @@ editorForm.addEventListener("submit", async (event) => {
   ProductStore.saveProducts(products);
   renderHeroSettings();
   renderEditor();
-  showToast("상품 정보가 저장되었습니다. 메인과 상세 페이지에 반영됩니다.");
+  showToast("선택한 상품을 저장했습니다.");
 });
 
 orderList.addEventListener("change", (event) => {
