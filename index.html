@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOIR CASE | 케이스와 화면 디자인 세트</title>
+    <meta name="description" content="케이스, 배경화면, 위젯을 한 번에 맞추는 프리미엄 폰 스타일링 스토어 NOIR CASE." />
+    <meta property="og:title" content="NOIR CASE" />
+    <meta property="og:description" content="케이스와 화면 디자인을 세트로 맞춰주는 프리미엄 폰 스타일링 브랜드" />
+    <meta property="og:image" content="assets/hero-case.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="NOIR CASE 홈">
+        <span class="brand-mark">N</span>
+        <span>NOIR CASE</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="#products" data-i18n="navProducts">스타일 세트</a>
+        <a href="#quality" data-i18n="navQuality">품질</a>
+        <a href="#support" data-i18n="navSupport">배송</a>
+      </nav>
+      <a class="admin-open" href="admin.html" data-i18n="admin">관리자</a>
+    </header>
+
+    <main id="top">
+      <section class="hero" data-hero>
+        <img class="hero-bg" src="assets/hero-case.png" alt="프리미엄 케이스" data-hero-image />
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-hero-category>Phone Styling Set</p>
+          <h1 data-hero-title data-i18n="heroDefaultTitle">케이스와 화면을 하나의 무드로</h1>
+          <p class="hero-copy" data-hero-copy data-i18n="heroDefaultCopy">
+            케이스, 배경화면, 위젯까지 맞춰 폰 전체의 인상을 완성하는 프리미엄 스타일링 세트.
+          </p>
+          <strong class="hero-price" data-hero-price></strong>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#products" data-hero-detail>컬렉션 보기</a>
+            <button class="secondary-btn" type="button" data-hero-add data-i18n="cart">장바구니</button>
+          </div>
+        </div>
+        <div class="hero-controls" aria-label="메인 상품 전환">
+          <button type="button" data-hero-prev aria-label="이전 상품">‹</button>
+          <div class="hero-dots" data-hero-dots></div>
+          <button type="button" data-hero-next aria-label="다음 상품">›</button>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="브랜드 가치">
+        <span>MATTE BLACK</span>
+        <span>DROP PROTECTION</span>
+        <span>SCREEN DESIGN</span>
+        <span>EXECUTIVE DETAIL</span>
+      </section>
+
+      <section class="products-section" id="products">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="completeStyling">Complete Phone Styling</p>
+            <h2 data-i18n="collectionTitle">스타일 세트 컬렉션</h2>
+          </div>
+          <div class="shop-controls">
+            <input type="search" placeholder="상품 검색" data-search data-i18n-placeholder="productSearch" />
+            <select data-category>
+              <option value="all" data-i18n="allCategories">전체 카테고리</option>
+            </select>
+            <select data-sort>
+              <option value="featured" data-i18n="featured">추천순</option>
+              <option value="price-low" data-i18n="priceLow">낮은 가격순</option>
+              <option value="price-high" data-i18n="priceHigh">높은 가격순</option>
+              <option value="newest" data-i18n="newest">신상품순</option>
+            </select>
+          </div>
+        </div>
+        <div class="product-grid" data-products></div>
+      </section>
+
+      <section class="quality-section" id="quality">
+        <div class="quality-copy">
+          <p class="eyebrow">Built For Daily Command</p>
+          <h2 data-i18n="qualityTitle">손에 드는 케이스와 매일 보는 화면까지</h2>
+          <p data-i18n="qualityCopy">
+            케이스의 소재감과 배경화면의 색감, 위젯 구성까지 하나의 무드로 설계합니다.
+            폰을 켤 때부터 손에 쥘 때까지 자연스럽게 이어지도록 구성했습니다.
+          </p>
+        </div>
+        <div class="spec-list" aria-label="제품 특징">
+          <div>
+            <strong>1.2mm</strong>
+            <span>카메라 보호 립</span>
+          </div>
+          <div>
+            <strong>38g</strong>
+            <span>슬림 라인 평균 중량</span>
+          </div>
+          <div>
+            <strong>360°</strong>
+            <span>모서리 충격 분산</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="service-section" id="support">
+        <article>
+          <h3 data-i18n="deliveryDownload">배송 + 다운로드</h3>
+          <p data-i18n="deliveryDownloadCopy">케이스는 배송으로, 배경화면과 위젯 파일은 디지털 다운로드로 제공할 수 있습니다.</p>
+        </article>
+        <article>
+          <h3 data-i18n="styleMatching">스타일 매칭</h3>
+          <p data-i18n="styleMatchingCopy">케이스 컬러와 화면 디자인이 따로 놀지 않도록 세트 단위로 구성합니다.</p>
+        </article>
+        <article>
+          <h3 data-i18n="paymentReady">결제 연동 준비</h3>
+          <p data-i18n="paymentReadyCopy">토스페이먼츠, 포트원, 카카오페이 같은 국내 PG를 붙일 수 있는 버튼 구조입니다.</p>
+        </article>
+      </section>
+    </main>
+
+    <aside class="cart-drawer" data-cart-drawer aria-label="장바구니">
+      <div class="drawer-head">
+        <h2 data-i18n="orderSheet">주문서</h2>
+        <button class="icon-btn" type="button" data-close-cart aria-label="장바구니 닫기">×</button>
+      </div>
+      <div class="cart-items" data-cart-items></div>
+      <div class="cart-total">
+        <span>결제 예정 금액</span>
+        <strong data-cart-total>0원</strong>
+      </div>
+      <button class="checkout-btn" type="button" data-checkout data-i18n="checkout">결제하기</button>
+      <p class="checkout-note">현재는 데모 결제입니다. 실제 판매 전 PG 가맹점 심사와 서버 검증을 연결하세요.</p>
+    </aside>
+
+    <button class="cart-fab" type="button" data-open-cart aria-label="장바구니 열기">
+      <span>Cart</span>
+      <strong data-cart-count>0</strong>
+    </button>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <footer class="site-footer">
+      <strong>NOIR CASE</strong>
+      <span data-i18n="footer">케이스와 화면 디자인을 맞춰주는 폰 스타일링 스토어</span>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="store.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
