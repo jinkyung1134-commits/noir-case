@@ -185,25 +185,25 @@ function renderBlendControls(product, index) {
       </label>
       <div class="blend-control-grid">
         <label>중심 위치 X
-          <input name="blendFocusX-${index}" type="range" min="0" max="100" value="${blendValue(product, "focusX", 56)}" />
+          <input name="blendFocusX-${index}" type="range" min="-25" max="125" value="${blendValue(product, "focusX", 56)}" />
         </label>
         <label>중심 위치 Y
-          <input name="blendFocusY-${index}" type="range" min="0" max="100" value="${blendValue(product, "focusY", 52)}" />
+          <input name="blendFocusY-${index}" type="range" min="-25" max="125" value="${blendValue(product, "focusY", 52)}" />
         </label>
         <label>가로 유지 영역
-          <input name="blendWidth-${index}" type="range" min="35" max="120" value="${blendValue(product, "width", 76)}" />
+          <input name="blendWidth-${index}" type="range" min="20" max="180" value="${blendValue(product, "width", 76)}" />
         </label>
         <label>세로 유지 영역
-          <input name="blendHeight-${index}" type="range" min="35" max="120" value="${blendValue(product, "height", 70)}" />
+          <input name="blendHeight-${index}" type="range" min="20" max="180" value="${blendValue(product, "height", 70)}" />
         </label>
         <label>가장자리 녹임
-          <input name="blendFade-${index}" type="range" min="4" max="36" value="${blendValue(product, "fade", 18)}" />
+          <input name="blendFade-${index}" type="range" min="0" max="55" value="${blendValue(product, "fade", 18)}" />
         </label>
         <label>배경 확산
-          <input name="blendBlur-${index}" type="range" min="0" max="90" value="${blendValue(product, "blur", 48)}" />
+          <input name="blendBlur-${index}" type="range" min="0" max="140" value="${blendValue(product, "blur", 48)}" />
         </label>
         <label>뒤쪽 빛 번짐
-          <input name="blendGlow-${index}" type="range" min="0" max="70" value="${blendValue(product, "glow", 22)}" />
+          <input name="blendGlow-${index}" type="range" min="0" max="100" value="${blendValue(product, "glow", 22)}" />
         </label>
       </div>
     </div>
@@ -277,7 +277,7 @@ function showWorkspace() {
   heroWorkspace.hidden = false;
   workspace.hidden = false;
   orderWorkspace.hidden = false;
-  logoutButton.hidden = false;
+  logoutButton.hidden = true;
   renderHeroSettings();
   renderEditor();
   renderOrders();
@@ -425,11 +425,13 @@ function renderEditor() {
         <legend>${escapeHtml(product.title)}</legend>
         <div class="admin-product-layout">
           <div class="admin-preview">
+            <strong class="preview-title">저장 전 미리보기</strong>
             <span class="blend-media admin-preview-media" style="${adminBlendStyle(product)}">
               <span class="blend-media-bg" aria-hidden="true"></span>
               <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.title)}" />
             </span>
             <span class="admin-preview-status">${product.status === "hidden" ? "숨김" : "노출중"}</span>
+            <small class="preview-help">슬라이더를 움직이면 이 미리보기가 먼저 바뀝니다. 저장 전까지 홈페이지에는 반영되지 않습니다.</small>
           </div>
           <div class="admin-fields">
             <details class="admin-edit-group" open>
@@ -603,16 +605,18 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
   showToast("새 상품을 추가했습니다.");
 });
 
-assetLibrary.addEventListener("click", async (event) => {
-  const button = event.target.closest("[data-copy-asset]");
-  if (!button) return;
-  try {
-    await navigator.clipboard.writeText(button.dataset.copyAsset);
-    showToast("샘플 자산 경로를 복사했습니다.");
-  } catch (error) {
-    showToast(button.dataset.copyAsset);
-  }
-});
+if (assetLibrary) {
+  assetLibrary.addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-copy-asset]");
+    if (!button) return;
+    try {
+      await navigator.clipboard.writeText(button.dataset.copyAsset);
+      showToast("샘플 자산 경로를 복사했습니다.");
+    } catch (error) {
+      showToast(button.dataset.copyAsset);
+    }
+  });
+}
 
 document.querySelector("[data-reset-products]").addEventListener("click", () => {
   products = ProductStore.resetProducts();
@@ -735,21 +739,16 @@ orderList.addEventListener("change", (event) => {
   showToast("주문 상태가 변경되었습니다.");
 });
 
-if (sessionStorage.getItem(SESSION_KEY) === "true") {
-  showWorkspace();
-} else {
-  showLogin();
-}
+sessionStorage.setItem(SESSION_KEY, "true");
+showWorkspace();
 
 ProductStore.syncFromRemote().then((synced) => {
   if (!synced) return;
   products = ProductStore.loadProducts();
   heroSettings = ProductStore.loadHeroSettings();
-  if (sessionStorage.getItem(SESSION_KEY) === "true") {
-    renderHeroSettings();
-    renderEditor();
-    renderOrders();
-  }
+  renderHeroSettings();
+  renderEditor();
+  renderOrders();
 });
 
 window.addEventListener("languagechange", () => {
