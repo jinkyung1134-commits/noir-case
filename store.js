@@ -257,13 +257,13 @@
   function normalizeMediaBlend(value = {}) {
     return {
       enabled: value.enabled !== false,
-      focusX: clampNumber(value.focusX, 56, 0, 100),
-      focusY: clampNumber(value.focusY, 52, 0, 100),
-      width: clampNumber(value.width, 76, 35, 120),
-      height: clampNumber(value.height, 70, 35, 120),
-      fade: clampNumber(value.fade, 18, 4, 36),
-      blur: clampNumber(value.blur, 48, 0, 90),
-      glow: clampNumber(value.glow, 22, 0, 70),
+      focusX: clampNumber(value.focusX, 56, -25, 125),
+      focusY: clampNumber(value.focusY, 52, -25, 125),
+      width: clampNumber(value.width, 76, 20, 180),
+      height: clampNumber(value.height, 70, 20, 180),
+      fade: clampNumber(value.fade, 18, 0, 55),
+      blur: clampNumber(value.blur, 48, 0, 140),
+      glow: clampNumber(value.glow, 22, 0, 100),
     };
   }
 
