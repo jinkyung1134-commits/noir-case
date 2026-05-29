@@ -50,6 +50,42 @@ function localizedList(product, lang, key) {
   return Array.isArray(value) ? value.join("\n") : "";
 }
 
+function formatStorySections(sections) {
+  return (sections || [])
+    .map((section) => [section.eyebrow, section.title, section.body, section.image].filter((value) => value !== undefined).join(" | "))
+    .join("\n");
+}
+
+function formatSpecs(specs) {
+  return (specs || [])
+    .map((spec) => [spec.label, spec.value, spec.body].filter((value) => value !== undefined).join(" | "))
+    .join("\n");
+}
+
+function parseStorySections(value) {
+  return String(value || "")
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [eyebrow = "", title = "", body = "", image = ""] = line.split("|").map((part) => part.trim());
+      return { eyebrow, title, body, image };
+    })
+    .filter((section) => section.title || section.body);
+}
+
+function parseSpecs(value) {
+  return String(value || "")
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label = "", value = "", body = ""] = line.split("|").map((part) => part.trim());
+      return { label, value, body };
+    })
+    .filter((spec) => spec.label || spec.value);
+}
+
 function renderLanguageFields(product, index) {
   const languages = [
     { code: "en", label: "영어", placeholder: "English text" },
@@ -85,6 +121,12 @@ function renderLanguageFields(product, index) {
               <label>${language.label} 옵션
                 <textarea name="i18n-${language.code}-optionText-${index}" placeholder="iPhone 15, Galaxy S24">${escapeHtml(localizedField(product, language.code, "optionText"))}</textarea>
               </label>
+              <label>${language.label} 상세 소개 섹션
+                <textarea name="i18n-${language.code}-storySections-${index}" placeholder="eyebrow | title | body | image">${escapeHtml(formatStorySections(localizedField(product, language.code, "storySections", [])))}</textarea>
+              </label>
+              <label>${language.label} 강조 스펙
+                <textarea name="i18n-${language.code}-specs-${index}" placeholder="label | value | body">${escapeHtml(formatSpecs(localizedField(product, language.code, "specs", [])))}</textarea>
+              </label>
             </div>
           `,
         )
@@ -107,6 +149,8 @@ function productTranslations(data, index, currentTranslations = {}) {
       detail: data.get(`i18n-${lang}-detail-${index}`).trim(),
       includedItems: lines(data.get(`i18n-${lang}-includedItems-${index}`)),
       optionText: data.get(`i18n-${lang}-optionText-${index}`).trim(),
+      storySections: parseStorySections(data.get(`i18n-${lang}-storySections-${index}`)),
+      specs: parseSpecs(data.get(`i18n-${lang}-specs-${index}`)),
     });
     if (Object.keys(fields).length) translations[lang] = fields;
   });
@@ -250,6 +294,12 @@ function renderEditor() {
               <label>상세 설명
                 <textarea name="detail-${index}">${escapeHtml(product.detail)}</textarea>
               </label>
+              <label>상세 소개 섹션
+                <textarea name="storySections-${index}" placeholder="eyebrow | title | body | image">${escapeHtml(formatStorySections(product.storySections))}</textarea>
+              </label>
+              <label>강조 스펙
+                <textarea name="specs-${index}" placeholder="label | value | body">${escapeHtml(formatSpecs(product.specs))}</textarea>
+              </label>
               <label>포함 구성
                 <textarea name="includedItems-${index}" placeholder="한 줄에 하나씩 입력">${escapeHtml(product.includedItems.join("\n"))}</textarea>
               </label>
@@ -331,6 +381,14 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
     video: "",
     digitalFiles: [],
     includedItems: ["케이스 1개", "배경화면 10종", "위젯 세팅 가이드"],
+    storySections: [
+      { eyebrow: "Design", title: "케이스와 화면을 한 번에", body: "상품의 핵심 장점을 애플식 상세 페이지 흐름으로 보여주세요.", image: "assets/case-aramid.png" },
+    ],
+    specs: [
+      { label: "Set", value: "3", body: "포함 구성" },
+      { label: "Delivery", value: "Both", body: "배송 + 디지털" },
+      { label: "Guide", value: "PDF", body: "설정 가이드" },
+    ],
     deliveryType: "both",
     badge: "STYLE SET",
     category: "Style Sets",
@@ -407,6 +465,8 @@ editorForm.addEventListener("submit", async (event) => {
       video: uploadedVideo || data.get(`video-${index}`).trim(),
       digitalFiles: [...lines(data.get(`digitalFiles-${index}`)), ...digitalUploads].filter(Boolean),
       includedItems: lines(data.get(`includedItems-${index}`)),
+      storySections: parseStorySections(data.get(`storySections-${index}`)),
+      specs: parseSpecs(data.get(`specs-${index}`)),
       badge: data.get(`badge-${index}`).trim(),
       category: data.get(`category-${index}`),
       optionText: data.get(`optionText-${index}`).trim(),
