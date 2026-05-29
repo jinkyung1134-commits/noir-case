@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문서 | NOIR CASE</title>
+    <meta name="description" content="NOIR CASE 주문서에서 배송 정보와 결제를 진행하세요." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="checkout-page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="NOIR CASE 홈">
+        <span class="brand-mark">N</span>
+        <span>NOIR CASE</span>
+      </a>
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="index.html#products" data-i18n="navProducts">스타일 세트</a>
+        <a href="admin.html" data-i18n="admin">관리자</a>
+      </nav>
+    </header>
+
+    <main class="checkout-shell">
+      <section>
+        <p class="eyebrow">Checkout</p>
+        <h1 data-i18n="checkoutTitle">주문서 작성</h1>
+        <form class="checkout-form" data-checkout-form>
+          <label><span data-i18n="name">받는 분</span>
+            <input name="name" required placeholder="이름" />
+          </label>
+          <label><span data-i18n="phone">연락처</span>
+            <input name="phone" required placeholder="010-0000-0000" />
+          </label>
+          <label><span data-i18n="email">이메일</span>
+            <input name="email" type="email" placeholder="order@example.com" />
+          </label>
+          <div class="shipping-fields" data-shipping-fields>
+            <label><span data-i18n="address">주소</span>
+              <input name="address" required placeholder="도로명 주소" />
+            </label>
+            <label><span data-i18n="addressDetail">상세 주소</span>
+              <input name="addressDetail" placeholder="동, 호수 등" />
+            </label>
+            <label><span data-i18n="memo">배송 요청사항</span>
+              <textarea name="memo" placeholder="부재 시 문 앞에 놓아주세요."></textarea>
+            </label>
+          </div>
+          <button class="primary-btn full" type="submit" data-i18n="createOrder">주문 생성 및 결제</button>
+          <p class="form-help" data-i18n="checkoutHelp">현재는 데모 주문으로 저장됩니다. PG 키를 연결하면 실제 결제창으로 전환할 수 있습니다.</p>
+        </form>
+      </section>
+
+      <aside class="checkout-summary">
+        <h2 data-i18n="orderProducts">주문 상품</h2>
+        <div class="cart-items" data-checkout-items></div>
+        <div class="cart-total">
+          <span data-i18n="total">총 결제 금액</span>
+          <strong data-checkout-total>0원</strong>
+        </div>
+      </aside>
+    </main>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="store.js"></script>
+    <script src="checkout.js"></script>
+  </body>
+</html>
