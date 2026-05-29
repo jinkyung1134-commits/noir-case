@@ -97,6 +97,21 @@ function applyBlendStyle(element, settings = {}) {
   });
 }
 
+function applyHeroSettings() {
+  const tone = Number(heroSettings.tone ?? 34);
+  const brightness = Number(heroSettings.imageBrightness ?? 78);
+  const glow = Number(heroSettings.backgroundGlow ?? 22);
+  const overlay = Number(heroSettings.overlayStrength ?? 58);
+  const textTop = Number(heroSettings.textTop ?? 50);
+  const imageScale = Number(heroSettings.imageScale ?? 100);
+  heroSection.style.setProperty("--hero-tone", tone / 100);
+  heroSection.style.setProperty("--hero-image-brightness", brightness / 100);
+  heroSection.style.setProperty("--hero-bg-opacity", glow / 100);
+  heroSection.style.setProperty("--hero-overlay", overlay / 100);
+  heroSection.style.setProperty("--hero-content-y", `${textTop}%`);
+  heroSection.style.setProperty("--hero-art-scale", imageScale / 100);
+}
+
 function defaultOption() {
   if (I18n.current() === "ko") return "기본 옵션";
   if (I18n.current() === "zh") return "默认选项";
@@ -159,6 +174,7 @@ function renderHero() {
   heroImage.src = product.image;
   heroImage.alt = product.title;
   heroSection.style.setProperty("--hero-image", `url('${product.image}')`);
+  applyHeroSettings();
   applyBlendStyle(heroSection, product.mediaBlend);
   heroCategory.textContent = product.category || "Phone Styling Set";
   heroTitle.textContent = product.title;
