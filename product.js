@@ -55,11 +55,40 @@ function deliveryLabel(product) {
   return I18n.t("shippingDelivery");
 }
 
-function blendedImage(src, alt, className = "") {
+function blendStyle(settings = {}) {
+  const focusX = Number(settings.focusX ?? 56);
+  const focusY = Number(settings.focusY ?? 52);
+  const width = Number(settings.width ?? 76);
+  const height = Number(settings.height ?? 70);
+  const fade = Number(settings.fade ?? 18);
+  const blur = Number(settings.blur ?? 48);
+  const glow = Number(settings.glow ?? 22);
+  const enabled = settings.enabled !== false;
+  const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
+  const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
+  const edge = Math.max(soft + 4, Math.min(98, 100 - fade * 0.35));
+  const bgSoft = Math.max(24, Math.min(80, 100 - fade * 1.5));
+  return [
+    `--blend-focus-x: ${focusX}%`,
+    `--blend-focus-y: ${focusY}%`,
+    `--blend-width: ${width}%`,
+    `--blend-height: ${height}%`,
+    `--blend-fade: ${fade}%`,
+    `--blend-blur: ${blur}px`,
+    `--blend-glow: ${glow / 100}`,
+    `--blend-overlay: ${enabled ? 1 : 0}`,
+    `--blend-solid: ${solid}%`,
+    `--blend-soft: ${soft}%`,
+    `--blend-edge: ${edge}%`,
+    `--blend-bg-soft: ${bgSoft}%`,
+  ].join("; ");
+}
+
+function blendedImage(src, alt, className = "", settings = {}) {
   const image = escapeHtml(src);
   const label = escapeHtml(alt);
   return `
-    <span class="blend-media ${className}" style="--blend-image: url('${image}')">
+    <span class="blend-media ${className}" style="--blend-image: url('${image}'); ${blendStyle(settings)}">
       <span class="blend-media-bg" aria-hidden="true"></span>
       <img src="${image}" alt="${label}" />
     </span>
@@ -77,7 +106,7 @@ function renderStorySections(product) {
             <p>${escapeHtml(section.body || product.detail)}</p>
           </div>
           <div class="apple-story-media">
-            ${blendedImage(section.image || product.image, section.title || product.title)}
+            ${blendedImage(section.image || product.image, section.title || product.title, "", product.mediaBlend)}
           </div>
         </article>
       `,
@@ -119,7 +148,7 @@ function renderDetail() {
         <strong>${ProductStore.formatPrice(displayProduct.price)}</strong>
       </div>
       <div class="apple-hero-visual">
-        ${blendedImage(displayProduct.image, displayProduct.title, "hero-blend")}
+        ${blendedImage(displayProduct.image, displayProduct.title, "hero-blend", displayProduct.mediaBlend)}
       </div>
     </section>
 
@@ -167,7 +196,7 @@ function renderDetail() {
         <h2>${I18n.t("gallery")}</h2>
       </div>
       <div class="detail-main-image" data-main-image-wrap>
-        ${blendedImage(displayProduct.image, displayProduct.title)}
+        ${blendedImage(displayProduct.image, displayProduct.title, "", displayProduct.mediaBlend)}
       </div>
       <div class="detail-thumbs">
         ${gallery
@@ -194,7 +223,7 @@ function renderDetail() {
       <div class="sample-media-row">
         ${gallery
           .slice(0, 4)
-          .map((image) => blendedImage(image, `${displayProduct.title} sample`, "sample-blend"))
+          .map((image) => blendedImage(image, `${displayProduct.title} sample`, "sample-blend", displayProduct.mediaBlend))
           .join("")}
       </div>
     </section>
@@ -326,7 +355,7 @@ detail.addEventListener("click", (event) => {
   if (thumb) {
     const wrap = document.querySelector("[data-main-image-wrap]");
     const label = product ? I18n.localizedProduct(product).title : "sample";
-    if (wrap) wrap.innerHTML = blendedImage(thumb.dataset.thumb, label);
+    if (wrap) wrap.innerHTML = blendedImage(thumb.dataset.thumb, label, "", product ? product.mediaBlend : {});
     return;
   }
 
