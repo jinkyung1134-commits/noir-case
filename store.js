@@ -488,10 +488,21 @@
   }
 
   function defaultHeroSettings() {
+    const slides = defaultProducts.map((product) => ({
+      productId: product.id,
+      tone: 34,
+      imageBrightness: 78,
+      backgroundGlow: 22,
+      overlayStrength: 58,
+      textTop: 50,
+      imageScale: 100,
+      mediaBlend: normalizeMediaBlend(product.mediaBlend),
+    }));
     return {
       maxSlides: 3,
       intervalSeconds: 5,
       selectedProductIds: defaultProducts.map((product) => product.id),
+      slides,
       tone: 34,
       imageBrightness: 78,
       backgroundGlow: 22,
@@ -501,40 +512,60 @@
     };
   }
 
-  function loadHeroSettings() {
+  function normalizeHeroSlide(slide = {}, fallback = {}) {
+    return {
+      productId: slide.productId || fallback.productId || "",
+      tone: clampNumber(slide.tone, fallback.tone ?? 34, 0, 100),
+      imageBrightness: clampNumber(slide.imageBrightness, fallback.imageBrightness ?? 78, 35, 150),
+      backgroundGlow: clampNumber(slide.backgroundGlow, fallback.backgroundGlow ?? 22, 0, 100),
+      overlayStrength: clampNumber(slide.overlayStrength, fallback.overlayStrength ?? 58, 0, 100),
+      textTop: clampNumber(slide.textTop, fallback.textTop ?? 50, 25, 85),
+      imageScale: clampNumber(slide.imageScale, fallback.imageScale ?? 100, 50, 160),
+      mediaBlend: normalizeMediaBlend(slide.mediaBlend || fallback.mediaBlend),
+    };
+  }
+
+  function normalizeHeroSettings(settings = {}) {
     const fallback = defaultHeroSettings();
+    const selectedProductIds = Array.isArray(settings.selectedProductIds) ? settings.selectedProductIds : fallback.selectedProductIds;
+    const legacySlideDefaults = {
+      tone: settings.tone,
+      imageBrightness: settings.imageBrightness,
+      backgroundGlow: settings.backgroundGlow,
+      overlayStrength: settings.overlayStrength,
+      textTop: settings.textTop,
+      imageScale: settings.imageScale,
+    };
+    const slidesSource = Array.isArray(settings.slides) && settings.slides.length
+      ? settings.slides
+      : selectedProductIds.map((productId) => ({ productId, ...legacySlideDefaults }));
+    const slides = slidesSource.map((slide) => normalizeHeroSlide(slide, legacySlideDefaults)).filter((slide) => slide.productId);
+    return {
+      maxSlides: Math.max(1, Number(settings.maxSlides) || fallback.maxSlides),
+      intervalSeconds: Math.max(2, Number(settings.intervalSeconds) || fallback.intervalSeconds),
+      selectedProductIds: slides.length ? slides.map((slide) => slide.productId) : selectedProductIds,
+      slides: slides.length ? slides : fallback.slides,
+      tone: clampNumber(settings.tone, fallback.tone, 0, 100),
+      imageBrightness: clampNumber(settings.imageBrightness, fallback.imageBrightness, 35, 150),
+      backgroundGlow: clampNumber(settings.backgroundGlow, fallback.backgroundGlow, 0, 100),
+      overlayStrength: clampNumber(settings.overlayStrength, fallback.overlayStrength, 0, 100),
+      textTop: clampNumber(settings.textTop, fallback.textTop, 25, 85),
+      imageScale: clampNumber(settings.imageScale, fallback.imageScale, 50, 160),
+    };
+  }
+
+  function loadHeroSettings() {
     const saved = localStorage.getItem(HERO_SETTINGS_KEY);
-    if (!saved) return fallback;
+    if (!saved) return defaultHeroSettings();
     try {
-      const parsed = JSON.parse(saved);
-      return {
-        maxSlides: Math.max(1, Number(parsed.maxSlides) || fallback.maxSlides),
-        intervalSeconds: Math.max(2, Number(parsed.intervalSeconds) || fallback.intervalSeconds),
-        selectedProductIds: Array.isArray(parsed.selectedProductIds) ? parsed.selectedProductIds : fallback.selectedProductIds,
-        tone: clampNumber(parsed.tone, fallback.tone, 0, 100),
-        imageBrightness: clampNumber(parsed.imageBrightness, fallback.imageBrightness, 35, 130),
-        backgroundGlow: clampNumber(parsed.backgroundGlow, fallback.backgroundGlow, 0, 80),
-        overlayStrength: clampNumber(parsed.overlayStrength, fallback.overlayStrength, 0, 100),
-        textTop: clampNumber(parsed.textTop, fallback.textTop, 35, 78),
-        imageScale: clampNumber(parsed.imageScale, fallback.imageScale, 70, 130),
-      };
+      return normalizeHeroSettings(JSON.parse(saved));
     } catch (error) {
-      return fallback;
+      return defaultHeroSettings();
     }
   }
 
   function saveHeroSettings(settings) {
-    const nextSettings = {
-      maxSlides: Math.max(1, Number(settings.maxSlides) || 1),
-      intervalSeconds: Math.max(2, Number(settings.intervalSeconds) || 5),
-      selectedProductIds: Array.isArray(settings.selectedProductIds) ? settings.selectedProductIds : [],
-      tone: clampNumber(settings.tone, 34, 0, 100),
-      imageBrightness: clampNumber(settings.imageBrightness, 78, 35, 130),
-      backgroundGlow: clampNumber(settings.backgroundGlow, 22, 0, 80),
-      overlayStrength: clampNumber(settings.overlayStrength, 58, 0, 100),
-      textTop: clampNumber(settings.textTop, 50, 35, 78),
-      imageScale: clampNumber(settings.imageScale, 100, 70, 130),
-    };
+    const nextSettings = normalizeHeroSettings(settings);
     localStorage.setItem(HERO_SETTINGS_KEY, JSON.stringify(nextSettings));
     remoteSetState("hero_settings", nextSettings).catch(() => {});
     return nextSettings;
