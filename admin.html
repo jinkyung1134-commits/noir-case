@@ -15,66 +15,63 @@
         <span class="brand-mark">N</span>
         <span>NOIR CASE</span>
       </a>
-      <nav class="nav-links" aria-label="관리 메뉴">
-        <a href="index.html">쇼핑몰 보기</a>
-        <a href="#hero-admin">메인 화면</a>
-        <a href="#products-admin">상품 관리</a>
-        <a href="#orders-admin">주문 관리</a>
+      <nav class="nav-links" aria-label="관리자 메뉴">
+        <a href="#hero-admin">메인페이지 설정</a>
+        <a href="#products-admin">상품관리 설정</a>
+        <a href="#orders-admin">주문관리</a>
       </nav>
-      <button class="admin-open" type="button" data-logout hidden>로그아웃</button>
+      <a class="admin-open" href="index.html">홈페이지 보기</a>
     </header>
 
-    <main class="admin-shell">
+    <main class="admin-shell admin-redesign">
       <section class="admin-hero">
         <p class="eyebrow">Admin Console</p>
-        <h1>메인 화면과 상품을 관리자에서 운영합니다</h1>
-        <p>
-          상품을 등록하고, 어떤 상품을 첫 화면에 보여줄지 선택하세요.
-          선택한 상품은 메인 화면에서 자동으로 전환되고 고객이 직접 이전/다음으로 넘길 수 있습니다.
-        </p>
+        <h1>메인 화면과 상품을 분리해서 관리합니다.</h1>
+        <p>각 메인 슬라이드마다 상품, 밝기, 이미지 크기, 블러 영역을 따로 설정하고 저장 전 미리보기로 확인할 수 있습니다.</p>
       </section>
 
-      <section class="admin-login-card" data-login-card>
-        <h2>관리자 로그인</h2>
-        <form class="login-form" data-admin-login>
-          <label>
-            비밀번호
-            <input type="password" name="password" placeholder="관리자 비밀번호" autocomplete="current-password" />
-          </label>
-          <button class="primary-btn full" type="submit">접속</button>
-          <p class="form-help">초기 비밀번호: BLACKCASE2026</p>
+      <section class="admin-workspace" id="hero-admin">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Main Page</p>
+            <h2>메인페이지 설정</h2>
+          </div>
+          <button class="secondary-btn" type="button" data-add-hero-slide>슬라이드 추가</button>
+        </div>
+        <form class="admin-board" data-hero-form>
+          <div class="admin-list-panel">
+            <strong>메인 슬라이드</strong>
+            <div class="admin-item-list" data-hero-slide-list></div>
+          </div>
+          <div class="admin-edit-panel" data-hero-editor></div>
         </form>
       </section>
 
-      <section class="admin-workspace" id="hero-admin" data-hero-workspace hidden>
-        <div class="admin-toolbar">
-          <div>
-            <p class="eyebrow">Main Display</p>
-            <h2>메인 화면 설정</h2>
-          </div>
-        </div>
-        <form class="hero-admin-form" data-hero-form></form>
-      </section>
-
-      <section class="admin-workspace order-workspace" id="products-admin" data-admin-workspace hidden>
+      <section class="admin-workspace" id="products-admin">
         <div class="admin-toolbar">
           <div>
             <p class="eyebrow">Products</p>
-            <h2>상품 관리</h2>
+            <h2>상품관리 설정</h2>
           </div>
           <div class="editor-actions">
             <button class="secondary-btn" type="button" data-add-product>새 상품</button>
-            <button class="danger-btn" type="button" data-reset-products>초기화</button>
+            <button class="danger-btn" type="button" data-reset-products>상품 초기화</button>
           </div>
         </div>
-        <form class="editor-form" data-admin-editor></form>
+        <form class="admin-board" data-admin-editor>
+          <div class="admin-list-panel">
+            <strong>등록된 상품</strong>
+            <div class="admin-item-list product-strip" data-product-list></div>
+          </div>
+          <div class="admin-edit-panel" data-product-editor></div>
+        </form>
       </section>
 
-      <section class="admin-workspace order-workspace" id="orders-admin" data-order-workspace hidden>
+      <section class="admin-workspace order-workspace" id="orders-admin">
         <div class="admin-toolbar">
           <div>
             <p class="eyebrow">Orders</p>
-            <h2>주문 관리</h2>
+            <h2>주문관리</h2>
           </div>
         </div>
         <div class="order-list" data-order-list></div>
