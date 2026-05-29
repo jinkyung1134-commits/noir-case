@@ -200,6 +200,39 @@ function renderDetail() {
       <button class="primary-btn" type="button" data-mobile-buy>${I18n.t("buyNow")}</button>
     </div>
   `;
+  requestAnimationFrame(setupScrollMotion);
+}
+
+function setupScrollMotion() {
+  const animatedItems = detail.querySelectorAll(".apple-hero-copy, .apple-hero-visual, .apple-intro-lockup, .apple-story-row, .apple-spec-showcase article, .apple-gallery-stage, .apple-video-section, .apple-buy-section");
+  animatedItems.forEach((item) => item.classList.add("scroll-reveal"));
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    },
+    { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
+  );
+
+  animatedItems.forEach((item) => observer.observe(item));
+
+  const hero = detail.querySelector(".apple-immersive-hero");
+  const heroImage = detail.querySelector(".apple-hero-visual img");
+  const heroCopy = detail.querySelector(".apple-hero-copy");
+
+  function updateHeroMotion() {
+    if (!hero || !heroImage || !heroCopy) return;
+    const rect = hero.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height * 0.72, 1)));
+    heroImage.style.transform = `translateY(${progress * 26}px) scale(${1 + progress * 0.055})`;
+    heroCopy.style.transform = `translateY(${progress * -20}px)`;
+    heroCopy.style.opacity = String(1 - progress * 0.36);
+  }
+
+  updateHeroMotion();
+  window.addEventListener("scroll", updateHeroMotion, { passive: true });
 }
 
 function renderCart() {
