@@ -48,6 +48,25 @@ function deliveryLabel(product) {
   return I18n.t("shippingDelivery");
 }
 
+function renderStorySections(product) {
+  return product.storySections
+    .map(
+      (section, index) => `
+        <article class="apple-story-row ${index % 2 ? "reverse" : ""}">
+          <div class="apple-story-copy">
+            <p class="eyebrow">${escapeHtml(section.eyebrow || product.badge)}</p>
+            <h2>${escapeHtml(section.title || product.title)}</h2>
+            <p>${escapeHtml(section.body || product.detail)}</p>
+          </div>
+          <div class="apple-story-media">
+            <img src="${escapeHtml(section.image || product.image)}" alt="${escapeHtml(section.title || product.title)}" />
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderDetail() {
   const displayProduct = product ? I18n.localizedProduct(product) : null;
   if (!displayProduct || displayProduct.status === "hidden") {
@@ -64,25 +83,29 @@ function renderDetail() {
 
   const gallery = Array.from(new Set([displayProduct.image, ...displayProduct.gallery].filter(Boolean)));
   const options = optionList(displayProduct.optionText);
+  const specs = displayProduct.specs && displayProduct.specs.length ? displayProduct.specs : [];
+
   detail.innerHTML = `
     <nav class="product-local-nav">
       <strong>${escapeHtml(displayProduct.title)}</strong>
       <a href="#buy">${I18n.t("buy")}</a>
     </nav>
 
-    <section class="apple-detail-hero">
-      <div>
-        <p class="eyebrow">${escapeHtml(displayProduct.category)}</p>
+    <section class="apple-immersive-hero">
+      <div class="apple-hero-copy">
+        <p class="eyebrow">${escapeHtml(displayProduct.badge)}</p>
         <h1>${escapeHtml(displayProduct.title)}</h1>
         <p>${escapeHtml(displayProduct.subtitle)}</p>
-        <strong>${ProductStore.formatWon(displayProduct.price)}</strong>
+        <strong>${ProductStore.formatPrice(displayProduct.price)}</strong>
       </div>
-      <img src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" />
+      <div class="apple-hero-visual">
+        <img src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" />
+      </div>
     </section>
 
-    <section class="apple-feature-band">
+    <section class="apple-overview-strip">
       <article>
-        <span>${escapeHtml(displayProduct.badge)}</span>
+        <span>${escapeHtml(displayProduct.category)}</span>
         <strong>${typeLabel(displayProduct)}</strong>
       </article>
       <article>
@@ -95,33 +118,49 @@ function renderDetail() {
       </article>
     </section>
 
-    <section class="apple-showcase">
-      <div class="showcase-copy">
-        <p class="eyebrow">${I18n.t("story")}</p>
-        <h2>${escapeHtml(displayProduct.title)}</h2>
-        <p>${escapeHtml(displayProduct.detail)}</p>
-      </div>
-      <div class="showcase-media">
-        <img class="detail-main-image" src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" data-main-image />
-        <div class="detail-thumbs">
-          ${gallery
-            .map(
-              (image) => `
-                <button type="button" data-thumb="${escapeHtml(image)}" aria-label="${I18n.t("gallery")}">
-                  <img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)}" />
-                </button>
-              `,
-            )
-            .join("")}
-        </div>
-      </div>
+    <section class="apple-intro-lockup">
+      <p class="eyebrow">${I18n.t("story")}</p>
+      <h2>${escapeHtml(displayProduct.detail)}</h2>
     </section>
 
-    <section class="apple-video-section">
+    <section class="apple-story-section">
+      ${renderStorySections(displayProduct)}
+    </section>
+
+    <section class="apple-spec-showcase">
+      ${specs
+        .map(
+          (spec) => `
+            <article>
+              <span>${escapeHtml(spec.label)}</span>
+              <strong>${escapeHtml(spec.value)}</strong>
+              <p>${escapeHtml(spec.body)}</p>
+            </article>
+          `,
+        )
+        .join("")}
+    </section>
+
+    <section class="apple-gallery-stage">
       <div>
         <p class="eyebrow">${I18n.t("gallery")}</p>
         <h2>${I18n.t("gallery")}</h2>
       </div>
+      <img class="detail-main-image" src="${escapeHtml(displayProduct.image)}" alt="${escapeHtml(displayProduct.title)}" data-main-image />
+      <div class="detail-thumbs">
+        ${gallery
+          .map(
+            (image) => `
+              <button type="button" data-thumb="${escapeHtml(image)}" aria-label="${I18n.t("gallery")}">
+                <img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)}" />
+              </button>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <section class="apple-video-section">
       ${
         displayProduct.video
           ? `<video class="detail-video" src="${escapeHtml(displayProduct.video)}" controls playsinline preload="metadata"></video>`
@@ -140,7 +179,7 @@ function renderDetail() {
       </div>
       <form class="detail-info apple-buy-card" data-detail-form>
         <h2>${I18n.t("buy")}</h2>
-        <strong class="detail-price">${ProductStore.formatWon(displayProduct.price)}</strong>
+        <strong class="detail-price">${ProductStore.formatPrice(displayProduct.price)}</strong>
         <label>${I18n.t("optionSelect")}
           <select name="option">
             ${options.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}
@@ -155,6 +194,11 @@ function renderDetail() {
         </div>
       </form>
     </section>
+
+    <div class="mobile-buy-bar">
+      <span>${ProductStore.formatPrice(displayProduct.price)}</span>
+      <button class="primary-btn" type="button" data-mobile-buy>${I18n.t("buyNow")}</button>
+    </div>
   `;
 }
 
@@ -171,18 +215,20 @@ function renderCart() {
                 <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
-                  <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${ProductStore.formatWon(item.price * item.quantity)}</span>
+                  <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${ProductStore.formatPrice(item.price * item.quantity)}</span>
                 </div>
                 <button class="remove-btn" type="button" data-remove="${escapeHtml(item.lineId)}">삭제</button>
               </div>
             `,
           )
           .join("");
-  cartTotal.textContent = ProductStore.formatWon(ProductStore.cartTotal(cart));
+  cartTotal.textContent = ProductStore.formatPrice(ProductStore.cartTotal(cart));
 }
 
 function selectedPurchase() {
-  const data = new FormData(document.querySelector("[data-detail-form]"));
+  const form = document.querySelector("[data-detail-form]");
+  if (!form) return { option: defaultOption(), quantity: 1 };
+  const data = new FormData(form);
   return {
     option: data.get("option"),
     quantity: Number(data.get("quantity")) || 1,
@@ -197,6 +243,12 @@ function goCheckout() {
   window.location.href = "checkout.html";
 }
 
+function addSelectedProduct() {
+  const purchase = selectedPurchase();
+  ProductStore.addToCart(product, purchase.quantity, purchase.option);
+  renderCart();
+}
+
 detail.addEventListener("click", (event) => {
   const thumb = event.target.closest("[data-thumb]");
   if (thumb) {
@@ -205,18 +257,14 @@ detail.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("[data-add-cart]")) {
-    const purchase = selectedPurchase();
-    ProductStore.addToCart(product, purchase.quantity, purchase.option);
-    renderCart();
+    addSelectedProduct();
     cartDrawer.classList.add("open");
     showToast(addedMessage());
     return;
   }
 
-  if (event.target.closest("[data-buy-now]")) {
-    const purchase = selectedPurchase();
-    ProductStore.addToCart(product, purchase.quantity, purchase.option);
-    renderCart();
+  if (event.target.closest("[data-buy-now], [data-mobile-buy]")) {
+    addSelectedProduct();
     goCheckout();
   }
 });
