@@ -50,15 +50,51 @@ function emptyMessage() {
   return "No products match your filters.";
 }
 
-function blendedImage(src, alt, className = "") {
+function blendStyle(settings = {}) {
+  const focusX = Number(settings.focusX ?? 56);
+  const focusY = Number(settings.focusY ?? 52);
+  const width = Number(settings.width ?? 76);
+  const height = Number(settings.height ?? 70);
+  const fade = Number(settings.fade ?? 18);
+  const blur = Number(settings.blur ?? 48);
+  const glow = Number(settings.glow ?? 22);
+  const enabled = settings.enabled !== false;
+  const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
+  const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
+  const edge = Math.max(soft + 4, Math.min(98, 100 - fade * 0.35));
+  const bgSoft = Math.max(24, Math.min(80, 100 - fade * 1.5));
+  return [
+    `--blend-focus-x: ${focusX}%`,
+    `--blend-focus-y: ${focusY}%`,
+    `--blend-width: ${width}%`,
+    `--blend-height: ${height}%`,
+    `--blend-fade: ${fade}%`,
+    `--blend-blur: ${blur}px`,
+    `--blend-glow: ${glow / 100}`,
+    `--blend-overlay: ${enabled ? 1 : 0}`,
+    `--blend-solid: ${solid}%`,
+    `--blend-soft: ${soft}%`,
+    `--blend-edge: ${edge}%`,
+    `--blend-bg-soft: ${bgSoft}%`,
+  ].join("; ");
+}
+
+function blendedImage(src, alt, className = "", settings = {}) {
   const image = escapeHtml(src);
   const label = escapeHtml(alt);
   return `
-    <span class="blend-media ${className}" style="--blend-image: url('${image}')">
+    <span class="blend-media ${className}" style="--blend-image: url('${image}'); ${blendStyle(settings)}">
       <span class="blend-media-bg" aria-hidden="true"></span>
       <img src="${image}" alt="${label}" />
     </span>
   `;
+}
+
+function applyBlendStyle(element, settings = {}) {
+  blendStyle(settings).split("; ").forEach((declaration) => {
+    const [property, value] = declaration.split(": ");
+    if (property && value) element.style.setProperty(property, value);
+  });
 }
 
 function defaultOption() {
@@ -83,7 +119,7 @@ function renderProducts() {
             <article class="product-card">
               <a class="product-link" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="${escapeHtml(product.title)} 상세 보기">
                 <div class="product-media">
-                  ${blendedImage(product.image, product.title)}
+                  ${blendedImage(product.image, product.title, "", product.mediaBlend)}
                   <span class="product-badge">${escapeHtml(product.badge)}</span>
                 </div>
                 <div class="product-info">
@@ -123,6 +159,7 @@ function renderHero() {
   heroImage.src = product.image;
   heroImage.alt = product.title;
   heroSection.style.setProperty("--hero-image", `url('${product.image}')`);
+  applyBlendStyle(heroSection, product.mediaBlend);
   heroCategory.textContent = product.category || "Phone Styling Set";
   heroTitle.textContent = product.title;
   heroCopy.textContent = product.subtitle;
