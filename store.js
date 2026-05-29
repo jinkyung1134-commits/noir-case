@@ -248,6 +248,25 @@
       .filter((item) => Object.values(item).some(Boolean));
   }
 
+  function clampNumber(value, fallback, min, max) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return fallback;
+    return Math.min(max, Math.max(min, number));
+  }
+
+  function normalizeMediaBlend(value = {}) {
+    return {
+      enabled: value.enabled !== false,
+      focusX: clampNumber(value.focusX, 56, 0, 100),
+      focusY: clampNumber(value.focusY, 52, 0, 100),
+      width: clampNumber(value.width, 76, 35, 120),
+      height: clampNumber(value.height, 70, 35, 120),
+      fade: clampNumber(value.fade, 18, 4, 36),
+      blur: clampNumber(value.blur, 48, 0, 90),
+      glow: clampNumber(value.glow, 22, 0, 70),
+    };
+  }
+
   function normalizeProduct(product) {
     const image = product.image || "assets/case-aramid.png";
     const gallery = cleanList(product.gallery);
@@ -281,6 +300,7 @@
       optionText: product.optionText || "기본 옵션",
       stock: Number(product.stock) || 0,
       status: product.status || "active",
+      mediaBlend: normalizeMediaBlend(product.mediaBlend),
       i18n: product.i18n || {},
     };
   }
