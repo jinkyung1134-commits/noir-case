@@ -20,6 +20,7 @@ const toast = document.querySelector("[data-toast]");
 const searchInput = document.querySelector("[data-search]");
 const categorySelect = document.querySelector("[data-category]");
 const sortSelect = document.querySelector("[data-sort]");
+const heroSection = document.querySelector("[data-hero]");
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
@@ -121,6 +122,7 @@ function renderHero() {
   const product = I18n.localizedProduct(heroProducts[heroIndex]);
   heroImage.src = product.image;
   heroImage.alt = product.title;
+  heroSection.style.setProperty("--hero-image", `url('${product.image}')`);
   heroCategory.textContent = product.category || "Phone Styling Set";
   heroTitle.textContent = product.title;
   heroCopy.textContent = product.subtitle;
