@@ -1434,6 +1434,25 @@ textarea {
   display: none;
 }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(42px);
+  transition:
+    opacity 720ms ease,
+    transform 720ms cubic-bezier(0.2, 0.82, 0.2, 1);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.apple-hero-visual img,
+.apple-hero-copy {
+  will-change: transform, opacity;
+  transition: transform 120ms linear, opacity 120ms linear;
+}
+
 .detail-info,
 .apple-buy-card {
   display: grid;
@@ -1598,13 +1617,19 @@ textarea {
   }
 
   .apple-immersive-hero {
-    min-height: auto;
+    min-height: 118vh;
+    align-content: start;
     padding-top: 44px;
+    padding-bottom: 92px;
   }
 
   .apple-hero-copy {
+    position: sticky;
+    top: 84px;
+    z-index: 1;
     justify-items: start;
     text-align: left;
+    align-self: start;
   }
 
   .apple-hero-copy h1 {
@@ -1612,6 +1637,8 @@ textarea {
   }
 
   .apple-hero-visual img {
+    position: sticky;
+    top: 284px;
     width: min(100%, 520px);
     max-height: 44vh;
   }
@@ -1632,12 +1659,13 @@ textarea {
   }
 
   .apple-story-section {
-    gap: 64px;
+    gap: 88px;
   }
 
   .apple-story-row,
   .apple-story-row.reverse {
-    min-height: auto;
+    min-height: 108vh;
+    align-content: start;
   }
 
   .apple-story-row.reverse .apple-story-copy {
@@ -1645,11 +1673,21 @@ textarea {
   }
 
   .apple-story-copy {
-    position: static;
+    position: sticky;
+    top: 84px;
+    z-index: 1;
+    padding-bottom: 18px;
   }
 
   .apple-story-media {
-    min-height: 420px;
+    position: sticky;
+    top: 312px;
+    min-height: 46vh;
+    align-self: start;
+  }
+
+  .apple-story-media img {
+    max-height: 42vh;
   }
 
   .apple-spec-showcase strong {
@@ -1681,6 +1719,11 @@ textarea {
   .mobile-buy-bar .primary-btn {
     min-height: 44px;
     padding: 0 18px;
+  }
+
+  .scroll-reveal {
+    transform: translateY(56px) scale(0.985);
+    transition-duration: 820ms;
   }
 
   .ticker span {
