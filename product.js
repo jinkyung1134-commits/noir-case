@@ -253,8 +253,8 @@ function renderDetail() {
 
     <section class="apple-sample-assets">
       <div>
-        <p class="eyebrow">Sample Assets</p>
-        <h2>케이스와 화면 샘플</h2>
+        <p class="eyebrow">${I18n.t("sampleAssets")}</p>
+        <h2>${I18n.t("sampleAssetsTitle")}</h2>
       </div>
       <div class="sample-media-row">
         ${gallery
