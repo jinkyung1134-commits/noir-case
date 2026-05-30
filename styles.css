@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -26,6 +27,14 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: "Noto Sans KR", "Inter", sans-serif;
+  overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 button,
