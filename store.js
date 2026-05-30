@@ -267,13 +267,49 @@
     };
   }
 
+  function fallbackProductCopy(product = {}, image = "", productType = "case") {
+    const title = String(product.title || "").trim();
+    const subtitle = String(product.subtitle || "").trim();
+    const genericTitles = new Set(["새 스타일 세트", "New Style Set"]);
+    const genericSubtitles = new Set(["케이스와 화면 디자인을 한 번에 맞춘 세트입니다.", "케이스와 화면 디자인을 맞춘 상품입니다."]);
+    const titleIsGeneric = !title || genericTitles.has(title);
+    const subtitleIsGeneric = !subtitle || genericSubtitles.has(subtitle);
+
+    if (titleIsGeneric && String(product.id || "").startsWith("custom-")) {
+      return {
+        title: "Noir Signature Style Set",
+        subtitle: "대표 상품으로 다듬어 판매할 수 있는 프리미엄 스타일 세트",
+      };
+    }
+
+    if (image.includes("sample-detail-scene") || image.includes("case-tactical")) {
+      return {
+        title: titleIsGeneric ? "Tactical Screen Set" : title,
+        subtitle: subtitleIsGeneric ? "강한 보호감과 다크 메탈 화면 무드를 하나로 맞춘 세트" : subtitle,
+      };
+    }
+
+    if (productType === "digital" || image.includes("wallpaper")) {
+      return {
+        title: titleIsGeneric ? "Noir Digital Pack" : title,
+        subtitle: subtitleIsGeneric ? "화면만 바꿔도 분위기가 정리되는 배경화면과 위젯 팩" : subtitle,
+      };
+    }
+
+    return {
+      title: titleIsGeneric ? "Black Command Style Set" : title,
+      subtitle: subtitleIsGeneric ? "매트 블랙 케이스와 화면 디자인을 한 번에 맞춘 대표 세트" : subtitle,
+    };
+  }
+
   function normalizeProduct(product) {
     const image = product.image || "assets/case-aramid.png";
     const gallery = cleanList(product.gallery);
     const productType = product.productType || "case";
     const includedItems = cleanList(product.includedItems);
+    const fallbackCopy = fallbackProductCopy(product, image, productType);
     const fallbackStorySections = [
-      { eyebrow: product.badge || "Design", title: product.title || "상품 이야기", body: product.detail || product.subtitle || "상품 상세 설명", image },
+      { eyebrow: product.badge || "Design", title: fallbackCopy.title, body: product.detail || fallbackCopy.subtitle, image },
     ];
     const fallbackSpecs = [
       { label: "Type", value: productType === "digital" ? "Digital" : "Case", body: product.deliveryType || "shipping" },
@@ -282,9 +318,9 @@
     ];
     return {
       id: product.id || "product-" + Date.now(),
-      title: product.title || "새 스타일 세트",
-      subtitle: product.subtitle || "케이스와 화면 디자인을 맞춘 상품입니다.",
-      detail: product.detail || product.subtitle || "상세 설명을 입력하세요.",
+      title: fallbackCopy.title,
+      subtitle: fallbackCopy.subtitle,
+      detail: product.detail || fallbackCopy.subtitle,
       price: Number(product.price) || 0,
       productType,
       image,

@@ -768,9 +768,9 @@ heroForm.addEventListener("submit", (event) => {
 document.querySelector("[data-add-product]").addEventListener("click", () => {
   const product = {
     id: "custom-" + Date.now(),
-    title: "새 스타일 세트",
-    subtitle: "케이스와 화면 디자인을 함께 구성한 상품입니다.",
-    detail: "상품 상세 설명을 입력하세요.",
+    title: "Black Command Style Set",
+    subtitle: "매트 블랙 케이스와 화면 디자인을 한 번에 맞춘 대표 세트",
+    detail: "케이스의 소재감과 화면의 톤을 하나로 맞춘 프리미엄 폰 스타일링 세트입니다.",
     price: 79000,
     productType: "bundle",
     deliveryType: "both",
