@@ -95,6 +95,29 @@ function blendedImage(src, alt, className = "", settings = {}, loading = "lazy")
   `;
 }
 
+function setMeta(selector, content) {
+  const element = document.querySelector(selector);
+  if (element && content) element.setAttribute("content", content);
+}
+
+function updateProductMeta(displayProduct) {
+  if (!displayProduct || displayProduct.status === "hidden") {
+    document.title = `${I18n.t("productNotFound")} | NOIR CASE`;
+    setMeta('meta[name="description"]', I18n.t("productNotFoundCopy"));
+    return;
+  }
+  const title = `${displayProduct.title} | NOIR CASE`;
+  const description = displayProduct.subtitle || displayProduct.detail || "NOIR CASE premium phone styling set.";
+  document.title = title;
+  setMeta('meta[name="description"]', description);
+  setMeta('meta[property="og:title"]', title);
+  setMeta('meta[property="og:description"]', description);
+  setMeta('meta[property="og:image"]', displayProduct.image);
+  setMeta('meta[name="twitter:title"]', title);
+  setMeta('meta[name="twitter:description"]', description);
+  setMeta('meta[name="twitter:image"]', displayProduct.image);
+}
+
 function renderStorySections(product) {
   return product.storySections
     .map(
@@ -116,6 +139,7 @@ function renderStorySections(product) {
 
 function renderDetail() {
   const displayProduct = product ? I18n.localizedProduct(product) : null;
+  updateProductMeta(displayProduct);
   if (!displayProduct || displayProduct.status === "hidden") {
     detail.innerHTML = `
       <section class="result-box detail-missing">
