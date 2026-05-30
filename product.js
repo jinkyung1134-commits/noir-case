@@ -310,6 +310,7 @@ function renderMotionAsset(product) {
 function setupScrollMotion() {
   const animatedItems = detail.querySelectorAll(".apple-hero-copy, .apple-hero-visual, .apple-intro-lockup, .apple-story-row, .apple-spec-showcase article, .apple-gallery-stage, .apple-video-section, .apple-buy-section");
   animatedItems.forEach((item) => item.classList.add("scroll-reveal"));
+  detail.querySelectorAll(".apple-hero-copy, .apple-hero-visual").forEach((item) => item.classList.add("is-visible"));
 
   const observer = new IntersectionObserver(
     (entries) => {
