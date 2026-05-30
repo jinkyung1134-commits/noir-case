@@ -1304,6 +1304,12 @@ input[type="range"] {
   margin-bottom: 0;
 }
 
+.order-fulfillment {
+  color: var(--gold) !important;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
 .order-status {
   min-width: 180px;
 }

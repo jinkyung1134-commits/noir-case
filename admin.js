@@ -39,6 +39,20 @@ function normalizeOrderStatus(status) {
   return ORDER_STATUS_ALIASES[value] || (ORDER_STATUSES.includes(value) ? value : ORDER_STATUSES[0]);
 }
 
+function orderItemSummary(item) {
+  const quantity = Number(item.quantity) || 1;
+  const delivery =
+    item.deliveryType === "digital" ? "디지털" : item.deliveryType === "both" ? "배송 + 디지털" : "배송";
+  return `${escapeHtml(item.title)} ${quantity}개 · ${delivery}`;
+}
+
+function orderFulfillmentSummary(order) {
+  const files = Array.isArray(order.downloadFiles) ? order.downloadFiles.length : 0;
+  const parts = [order.needsShipping ? "배송 필요" : "디지털 전용"];
+  if (files) parts.push(`다운로드 ${files}개`);
+  return parts.join(" · ");
+}
+
 function lines(value) {
   return String(value || "")
     .split(/\n|,/)
@@ -661,7 +675,8 @@ function renderOrders() {
                     ${ORDER_STATUSES.map((status) => `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${status}</option>`).join("")}
                   </select>
                 </label>
-                <p>${order.items.map((item) => `${escapeHtml(item.title)} ${item.quantity || 1}개`).join(", ")}</p>
+                <p>${order.items.map(orderItemSummary).join(", ")}</p>
+                <p class="order-fulfillment">${orderFulfillmentSummary(order)}</p>
                 ${order.customer ? `<p>${escapeHtml(order.customer.name)} · ${escapeHtml(order.customer.phone)} · ${escapeHtml(order.customer.address || "디지털 상품")}</p>` : ""}
                 <strong>${ProductStore.formatPrice(order.total)}</strong>
               </article>
