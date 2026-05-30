@@ -24,6 +24,10 @@ function showToast(message) {
   window.setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
+function confirmAction(message) {
+  return window.confirm(message);
+}
+
 function lines(value) {
   return String(value || "")
     .split(/\n|,/)
@@ -751,6 +755,7 @@ heroForm.addEventListener("click", (event) => {
       showToast("메인 슬라이드는 최소 1개가 필요합니다.");
       return;
     }
+    if (!confirmAction("선택한 메인 슬라이드를 삭제할까요? 홈페이지 첫 화면 구성이 바뀝니다.")) return;
     slides.splice(selectedHeroIndex, 1);
     selectedHeroIndex = Math.max(0, selectedHeroIndex - 1);
     heroSettings = ProductStore.saveHeroSettings({ ...heroSettings, maxSlides: slides.length, selectedProductIds: slides.map((slide) => slide.productId), slides });
@@ -797,6 +802,7 @@ document.querySelector("[data-add-product]").addEventListener("click", () => {
 });
 
 document.querySelector("[data-reset-products]").addEventListener("click", () => {
+  if (!confirmAction("상품을 기본 샘플 상태로 초기화할까요? 현재 수정한 상품 정보가 바뀔 수 있습니다.")) return;
   products = ProductStore.resetProducts();
   selectedProductId = products[0] ? products[0].id : "";
   heroSettings = ProductStore.loadHeroSettings();
@@ -813,6 +819,7 @@ productForm.addEventListener("click", (event) => {
     return;
   }
   if (event.target.closest("[data-delete-product]")) {
+    if (!confirmAction("선택한 상품을 삭제할까요? 삭제 후에는 상품 목록과 메인 슬라이드 구성이 달라질 수 있습니다.")) return;
     products = products.filter((product) => product.id !== selectedProductId);
     selectedProductId = products[0] ? products[0].id : "";
     ProductStore.saveProducts(products);

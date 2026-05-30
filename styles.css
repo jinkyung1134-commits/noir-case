@@ -2457,6 +2457,7 @@ input[type="range"] {
   .admin-product-layout,
   .product-manager,
   .admin-board,
+  .admin-edit-panel,
   .admin-product-preview,
   .admin-fields,
   .admin-group-grid,
@@ -2489,6 +2490,14 @@ input[type="range"] {
   .admin-list-panel {
     position: static;
     max-height: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .admin-board,
+  .admin-edit-panel {
+    width: 100%;
+    min-width: 0;
   }
 
   .admin-preview-block {
