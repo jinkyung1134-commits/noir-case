@@ -2218,11 +2218,14 @@ input[type="range"] {
   }
 
   .cart-fab {
-    top: 76px;
-    right: 18px;
-    bottom: auto;
-    min-width: 54px;
-    min-height: 54px;
+    top: auto;
+    right: 16px;
+    bottom: 18px;
+    min-width: 48px;
+    min-height: 48px;
+    border-color: rgba(185, 151, 91, 0.42);
+    background: rgba(244, 241, 235, 0.92);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.38);
     justify-content: center;
     gap: 0;
     padding: 0;
@@ -2238,8 +2241,8 @@ input[type="range"] {
   }
 
   .cart-fab strong {
-    min-width: 26px;
-    height: 26px;
+    min-width: 24px;
+    height: 24px;
   }
 
   .hero {
