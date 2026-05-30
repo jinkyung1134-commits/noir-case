@@ -1,4 +1,10 @@
 const ORDER_STATUSES = ["주문 접수", "결제 완료", "배송 준비", "배송중", "배송 완료", "취소"];
+const ORDER_STATUS_ALIASES = {
+  "Order received": "주문 접수",
+  "订单已接收": "주문 접수",
+  "Payment complete": "결제 완료",
+  "支付已完成": "결제 완료",
+};
 
 let products = ProductStore.loadProducts();
 let heroSettings = ProductStore.loadHeroSettings();
@@ -26,6 +32,11 @@ function showToast(message) {
 
 function confirmAction(message) {
   return window.confirm(message);
+}
+
+function normalizeOrderStatus(status) {
+  const value = String(status || "").trim();
+  return ORDER_STATUS_ALIASES[value] || (ORDER_STATUSES.includes(value) ? value : ORDER_STATUSES[0]);
 }
 
 function lines(value) {
@@ -637,7 +648,9 @@ function renderOrders() {
       ? `<p class="checkout-note">아직 주문 기록이 없습니다.</p>`
       : orders
           .map(
-            (order) => `
+            (order) => {
+              const selectedStatus = normalizeOrderStatus(order.status);
+              return `
               <article class="order-card">
                 <div>
                   <strong>${escapeHtml(order.id)}</strong>
@@ -645,14 +658,15 @@ function renderOrders() {
                 </div>
                 <label class="order-status">주문 상태
                   <select data-order-status="${escapeHtml(order.id)}">
-                    ${ORDER_STATUSES.map((status) => `<option value="${status}" ${order.status === status ? "selected" : ""}>${status}</option>`).join("")}
+                    ${ORDER_STATUSES.map((status) => `<option value="${status}" ${selectedStatus === status ? "selected" : ""}>${status}</option>`).join("")}
                   </select>
                 </label>
                 <p>${order.items.map((item) => `${escapeHtml(item.title)} ${item.quantity || 1}개`).join(", ")}</p>
                 ${order.customer ? `<p>${escapeHtml(order.customer.name)} · ${escapeHtml(order.customer.phone)} · ${escapeHtml(order.customer.address || "디지털 상품")}</p>` : ""}
                 <strong>${ProductStore.formatPrice(order.total)}</strong>
               </article>
-            `,
+            `;
+            },
           )
           .join("");
 }
