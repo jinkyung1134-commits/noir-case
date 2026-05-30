@@ -16,6 +16,7 @@ const cartDrawer = document.querySelector("[data-cart-drawer]");
 const cartItems = document.querySelector("[data-cart-items]");
 const cartTotal = document.querySelector("[data-cart-total]");
 const cartCount = document.querySelector("[data-cart-count]");
+const checkoutButton = document.querySelector("[data-checkout]");
 const toast = document.querySelector("[data-toast]");
 const searchInput = document.querySelector("[data-search]");
 const categorySelect = document.querySelector("[data-category]");
@@ -252,9 +253,12 @@ function filteredAndSortedProducts() {
 
 function renderCart() {
   const cart = ProductStore.loadCart();
+  const hasItems = cart.length > 0;
   cartCount.textContent = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+  checkoutButton.disabled = !hasItems;
+  checkoutButton.setAttribute("aria-disabled", String(!hasItems));
   cartItems.innerHTML =
-    cart.length === 0
+    !hasItems
       ? `<p class="checkout-note">${I18n.t("cartEmpty")}</p>`
       : cart
           .map(
