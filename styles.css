@@ -2212,8 +2212,9 @@ input[type="range"] {
   }
 
   .cart-fab {
+    top: 76px;
     right: 18px;
-    bottom: calc(18px + env(safe-area-inset-bottom));
+    bottom: auto;
     min-width: 54px;
     min-height: 54px;
     justify-content: center;
