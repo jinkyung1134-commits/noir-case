@@ -37,6 +37,17 @@ function addedMessage() {
   return "Added to cart.";
 }
 
+function cartOptionLabel(option) {
+  const value = String(option || "").trim();
+  return !value || value === "기본 옵션" ? defaultOption() : value;
+}
+
+function cartQuantityLabel(quantity) {
+  const count = Number(quantity) || 1;
+  if (I18n.current() === "en") return `${count} ${I18n.t("itemUnit")}${count === 1 ? "" : "s"}`;
+  return `${count}${I18n.t("itemUnit")}`;
+}
+
 function optionList(productOptionText) {
   return String(productOptionText || defaultOption())
     .split(/\n|,/)
@@ -344,9 +355,9 @@ function renderCart() {
                 <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" />
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
-                  <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${ProductStore.formatPrice(item.price * item.quantity)}</span>
+                  <span>${escapeHtml(cartOptionLabel(item.option))} · ${cartQuantityLabel(item.quantity)} · ${deliveryLabel(item)} · ${ProductStore.formatPrice(item.price * item.quantity)}</span>
                 </div>
-                <button class="remove-btn" type="button" data-remove="${escapeHtml(item.lineId)}">삭제</button>
+                <button class="remove-btn" type="button" data-remove="${escapeHtml(item.lineId)}">${I18n.t("remove")}</button>
               </div>
             `,
           )

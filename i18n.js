@@ -16,6 +16,12 @@
       checkout: "결제하기",
       orderSheet: "주문서",
       cartEmpty: "담긴 상품이 없습니다.",
+      cartTotalLabel: "결제 예정 금액",
+      cartDemoNote: "현재는 데모 결제입니다. 실제 판매 전 PG 가맹점 심사와 서버 검증을 연결하세요.",
+      remove: "삭제",
+      cartOpen: "장바구니 열기",
+      cartClose: "장바구니 닫기",
+      itemUnit: "개",
       productSearch: "상품 검색",
       allCategories: "전체 카테고리",
       featured: "추천순",
@@ -84,6 +90,12 @@
       checkout: "Checkout",
       orderSheet: "Order",
       cartEmpty: "Your cart is empty.",
+      cartTotalLabel: "Estimated total",
+      cartDemoNote: "This is a demo checkout. Connect PG approval and server verification before real sales.",
+      remove: "Remove",
+      cartOpen: "Open cart",
+      cartClose: "Close cart",
+      itemUnit: "item",
       productSearch: "Search products",
       allCategories: "All categories",
       featured: "Featured",
@@ -152,6 +164,12 @@
       checkout: "结账",
       orderSheet: "订单",
       cartEmpty: "购物车为空。",
+      cartTotalLabel: "预计支付金额",
+      cartDemoNote: "当前为演示结账。正式销售前需要连接支付审核和服务器验证。",
+      remove: "删除",
+      cartOpen: "打开购物车",
+      cartClose: "关闭购物车",
+      itemUnit: "件",
       productSearch: "搜索商品",
       allCategories: "全部分类",
       featured: "推荐",
@@ -271,6 +289,9 @@
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
       node.placeholder = t(node.dataset.i18nPlaceholder);
+    });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+      node.setAttribute("aria-label", t(node.dataset.i18nAriaLabel));
     });
     const select = document.querySelector("[data-language-select]");
     if (select) select.value = current();

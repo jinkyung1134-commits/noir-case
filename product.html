@@ -37,18 +37,18 @@
     <aside class="cart-drawer" data-cart-drawer aria-label="장바구니">
       <div class="drawer-head">
         <h2 data-i18n="orderSheet">주문서</h2>
-        <button class="icon-btn" type="button" data-close-cart aria-label="장바구니 닫기">×</button>
+        <button class="icon-btn" type="button" data-close-cart aria-label="장바구니 닫기" data-i18n-aria-label="cartClose">×</button>
       </div>
       <div class="cart-items" data-cart-items></div>
       <div class="cart-total">
-        <span>결제 예정 금액</span>
+        <span data-i18n="cartTotalLabel">결제 예정 금액</span>
         <strong data-cart-total>0원</strong>
       </div>
       <button class="checkout-btn" type="button" data-checkout data-i18n="checkout">결제하기</button>
-      <p class="checkout-note">현재는 데모 결제입니다. 실제 판매 전 PG 가맹점 심사와 서버 검증을 연결하세요.</p>
+      <p class="checkout-note" data-i18n="cartDemoNote">현재는 데모 결제입니다. 실제 판매 전 PG 가맹점 심사와 서버 검증을 연결하세요.</p>
     </aside>
 
-    <button class="cart-fab" type="button" data-floating-cart aria-label="장바구니 열기">
+    <button class="cart-fab" type="button" data-floating-cart aria-label="장바구니 열기" data-i18n-aria-label="cartOpen">
       <span>Cart</span>
       <strong data-cart-count>0</strong>
     </button>
@@ -56,8 +56,8 @@
     <div class="toast" data-toast role="status" aria-live="polite"></div>
 
     <script src="config.js"></script>
-    <script src="i18n.js?v=20260530-checkout"></script>
+    <script src="i18n.js?v=20260530-cartcopy"></script>
     <script src="store.js"></script>
-    <script src="product.js?v=20260530-cartstate"></script>
+    <script src="product.js?v=20260530-cartcopy"></script>
   </body>
 </html>
