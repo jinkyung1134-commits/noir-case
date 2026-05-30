@@ -32,6 +32,7 @@ function orderReceivedStatus() {
 function renderCheckout() {
   const cart = ProductStore.loadCart();
   const needsShipping = ProductStore.cartNeedsShipping(cart);
+  submitButton.disabled = !cart.length;
   shippingFields.hidden = !needsShipping;
   shippingFields.querySelectorAll("[name='address']").forEach((input) => {
     input.required = needsShipping;

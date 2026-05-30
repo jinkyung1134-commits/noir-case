@@ -333,8 +333,13 @@ h1 {
 
 .primary-btn:disabled,
 .checkout-btn:disabled {
-  cursor: wait;
+  cursor: not-allowed;
   opacity: 0.58;
+}
+
+form[aria-busy="true"] .primary-btn:disabled,
+form[aria-busy="true"] .checkout-btn:disabled {
+  cursor: wait;
 }
 
 .secondary-btn {
@@ -1580,6 +1585,23 @@ input[type="range"] {
   grid-column: 1 / -1;
 }
 
+.checkout-assurance {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.checkout-assurance span {
+  border: 1px solid rgba(185, 151, 91, 0.24);
+  background: rgba(185, 151, 91, 0.06);
+  color: var(--steel);
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 .checkout-summary {
   position: sticky;
   top: 96px;
@@ -2422,7 +2444,8 @@ input[type="range"] {
   .hero-setting-grid,
   .featured-product-list,
   .checkout-shell,
-  .checkout-form {
+  .checkout-form,
+  .checkout-assurance {
     grid-template-columns: 1fr;
   }
 

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260530-mobilebar" />
+    <link rel="stylesheet" href="styles.css?v=20260530-checkout" />
   </head>
   <body class="checkout-page">
     <header class="site-header">
@@ -27,20 +27,20 @@
         <h1 data-i18n="checkoutTitle">주문서 작성</h1>
         <form class="checkout-form" data-checkout-form>
           <label><span data-i18n="name">받는 분</span>
-            <input name="name" required placeholder="이름" />
+            <input name="name" required autocomplete="name" placeholder="이름" />
           </label>
           <label><span data-i18n="phone">연락처</span>
-            <input name="phone" required placeholder="010-0000-0000" />
+            <input name="phone" required autocomplete="tel" inputmode="tel" placeholder="010-0000-0000" />
           </label>
           <label><span data-i18n="email">이메일</span>
-            <input name="email" type="email" placeholder="order@example.com" />
+            <input name="email" type="email" autocomplete="email" placeholder="order@example.com" />
           </label>
           <div class="shipping-fields" data-shipping-fields>
             <label><span data-i18n="address">주소</span>
-              <input name="address" required placeholder="도로명 주소" />
+              <input name="address" required autocomplete="street-address" placeholder="도로명 주소" />
             </label>
             <label><span data-i18n="addressDetail">상세 주소</span>
-              <input name="addressDetail" placeholder="동, 호수 등" />
+              <input name="addressDetail" autocomplete="address-line2" placeholder="동, 호수 등" />
             </label>
             <label><span data-i18n="memo">배송 요청사항</span>
               <textarea name="memo" placeholder="부재 시 문 앞에 놓아주세요."></textarea>
@@ -48,6 +48,11 @@
           </div>
           <button class="primary-btn full" type="submit" data-i18n="createOrder">주문 생성 및 결제</button>
           <p class="form-help" data-i18n="checkoutHelp">현재는 데모 주문으로 저장됩니다. PG 키를 연결하면 실제 결제창으로 전환할 수 있습니다.</p>
+          <div class="checkout-assurance" aria-label="Checkout readiness">
+            <span data-i18n="checkoutDemoNote">데모 주문으로 흐름을 먼저 확인합니다.</span>
+            <span data-i18n="checkoutPaymentNote">실결제는 PG 키 연결 후 전환됩니다.</span>
+            <span data-i18n="checkoutOperatorNote">배송/환불 정책은 운영자 확인이 필요합니다.</span>
+          </div>
         </form>
       </section>
 
@@ -64,7 +69,7 @@
     <div class="toast" data-toast role="status" aria-live="polite"></div>
 
     <script src="config.js"></script>
-    <script src="i18n.js?v=20260530-care"></script>
+    <script src="i18n.js?v=20260530-checkout"></script>
     <script src="store.js"></script>
     <script src="checkout.js"></script>
   </body>
