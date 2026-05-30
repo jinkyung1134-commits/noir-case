@@ -53,8 +53,8 @@ function normalizeBlend(settings = {}) {
     width: clamp(settings.width, 76, 20, 180),
     height: clamp(settings.height, 70, 20, 180),
     fade: clamp(settings.fade, 18, 0, 55),
-    blur: clamp(settings.blur, 48, 0, 140),
-    glow: clamp(settings.glow, 22, 0, 100),
+    blur: clamp(settings.blur, 60, 0, 140),
+    glow: clamp(settings.glow, 18, 0, 100),
   };
 }
 
@@ -104,7 +104,7 @@ function previewMedia(image, title, settings = {}, className = "") {
   return `
     <span class="blend-media ${className}" style="${blendStyle(settings, image)}">
       <span class="blend-media-bg" aria-hidden="true"></span>
-      <img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" />
+      <img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy" decoding="async" />
     </span>
   `;
 }
@@ -255,7 +255,7 @@ function renderHeroList() {
       const product = slideProduct(slide);
       return `
         <button class="${index === selectedHeroIndex ? "active" : ""}" type="button" data-select-hero-slide="${index}">
-          <img src="${escapeHtml(product ? product.image : "")}" alt="" />
+          <img src="${escapeHtml(product ? product.image : "")}" alt="" loading="lazy" decoding="async" />
           <span>
             <strong>슬라이드 ${index + 1}</strong>
             <small>${escapeHtml(product ? product.title : "상품 없음")}</small>
@@ -297,7 +297,7 @@ function renderHeroEditor() {
       <div class="admin-hero-preview" data-hero-preview style="--hero-image: url('${escapeHtml(settings.image || product.image)}'); ${heroStyle(settings)} ${blendStyle(blend, settings.image || product.image)}">
         <div class="hero-preview-art blend-media" style="${blendStyle(blend, settings.image || product.image)}">
           <span class="blend-media-bg" aria-hidden="true"></span>
-          <img src="${escapeHtml(settings.image || product.image)}" alt="${escapeHtml(settings.title || product.title)}" />
+          <img src="${escapeHtml(settings.image || product.image)}" alt="${escapeHtml(settings.title || product.title)}" loading="lazy" decoding="async" />
         </div>
         <div class="hero-preview-shade"></div>
         <div class="hero-preview-copy">
@@ -421,7 +421,7 @@ function renderProductList() {
     .map(
       (product) => `
         <button class="${product.id === selectedProductId ? "active" : ""}" type="button" data-select-product="${escapeHtml(product.id)}">
-          <img src="${escapeHtml(product.image)}" alt="" />
+          <img src="${escapeHtml(product.image)}" alt="" loading="lazy" decoding="async" />
           <span>
             <strong>${escapeHtml(product.title)}</strong>
             <small>${escapeHtml(product.category)} · ${product.status === "hidden" ? "숨김" : "노출중"}</small>

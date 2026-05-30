@@ -3,7 +3,9 @@ const checkoutItems = document.querySelector("[data-checkout-items]");
 const checkoutTotal = document.querySelector("[data-checkout-total]");
 const shippingFields = document.querySelector("[data-shipping-fields]");
 const toast = document.querySelector("[data-toast]");
+const submitButton = checkoutForm.querySelector("button[type='submit']");
 const paymentConfig = (window.SiteConfig && window.SiteConfig.payment) || { provider: "demo", tossClientKey: "" };
+let isSubmitting = false;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
@@ -45,7 +47,7 @@ function renderCheckout() {
     .map(
       (item) => `
         <div class="cart-line">
-          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />
+          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" />
           <div>
             <h3>${escapeHtml(item.title)}</h3>
             <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${deliveryLabel(item)}</span>
@@ -89,11 +91,16 @@ async function requestTossPayment(order) {
 
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (isSubmitting) return;
   const cart = ProductStore.loadCart();
   if (!cart.length) {
     showToast(I18n.t("cartEmpty"));
     return;
   }
+
+  isSubmitting = true;
+  checkoutForm.setAttribute("aria-busy", "true");
+  submitButton.disabled = true;
 
   const data = new FormData(checkoutForm);
   const needsShipping = ProductStore.cartNeedsShipping(cart);
@@ -121,6 +128,9 @@ checkoutForm.addEventListener("submit", async (event) => {
       return;
     } catch (error) {
       showToast(I18n.current() === "ko" ? "결제창을 열지 못했습니다." : I18n.current() === "zh" ? "无法打开支付窗口。" : "Could not open checkout.");
+      isSubmitting = false;
+      checkoutForm.removeAttribute("aria-busy");
+      submitButton.disabled = false;
       return;
     }
   }

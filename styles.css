@@ -35,6 +35,15 @@ textarea {
   font: inherit;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -311,6 +320,12 @@ h1 {
 .checkout-btn {
   background: var(--text);
   color: #080808;
+}
+
+.primary-btn:disabled,
+.checkout-btn:disabled {
+  cursor: wait;
+  opacity: 0.58;
 }
 
 .secondary-btn {
@@ -1148,8 +1163,8 @@ input[type="range"] {
   --blend-width: 76%;
   --blend-height: 70%;
   --blend-fade: 18%;
-  --blend-blur: 48px;
-  --blend-glow: 0.22;
+  --blend-blur: 60px;
+  --blend-glow: 0.18;
   --blend-overlay: 1;
   --blend-solid: 60%;
   --blend-soft: 79%;
@@ -1157,28 +1172,32 @@ input[type="range"] {
   --blend-bg-soft: 73%;
 }
 
+.hero .hero-art.blend-media {
+  position: absolute;
+}
+
 .blend-media-bg {
   position: absolute;
-  inset: -14%;
+  inset: -18%;
   z-index: 0;
   background-image: var(--blend-image);
   background-size: cover;
   background-position: center;
-  filter: blur(var(--blend-blur)) saturate(0.96) brightness(0.54);
+  filter: blur(var(--blend-blur)) saturate(0.92) brightness(0.5);
   opacity: calc(var(--blend-glow) * var(--blend-overlay));
-  transform: scale(1.08);
-  -webkit-mask-image: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.48) var(--blend-bg-soft), rgba(0, 0, 0, 0.1) var(--blend-edge), transparent 100%);
-  mask-image: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.48) var(--blend-bg-soft), rgba(0, 0, 0, 0.1) var(--blend-edge), transparent 100%);
+  transform: scale(1.16);
+  -webkit-mask-image: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.28) var(--blend-bg-soft), rgba(0, 0, 0, 0.04) var(--blend-edge), transparent 100%);
+  mask-image: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.28) var(--blend-bg-soft), rgba(0, 0, 0, 0.04) var(--blend-edge), transparent 100%);
 }
 
 .blend-media::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -10%;
   z-index: 2;
   pointer-events: none;
   opacity: var(--blend-overlay);
-  background: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), transparent 0%, transparent var(--blend-solid), rgba(5, 5, 6, 0.18) var(--blend-soft), rgba(5, 5, 6, 0.62) var(--blend-edge), var(--blend-edge-color) 100%);
+  background: radial-gradient(ellipse var(--blend-width) var(--blend-height) at var(--blend-focus-x) var(--blend-focus-y), transparent 0%, transparent var(--blend-solid), rgba(5, 5, 6, 0.14) var(--blend-soft), rgba(5, 5, 6, 0.38) var(--blend-edge), transparent 100%);
 }
 
 .blend-media img {

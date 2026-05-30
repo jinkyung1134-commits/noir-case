@@ -56,8 +56,8 @@ function blendStyle(settings = {}) {
   const width = Number(settings.width ?? 76);
   const height = Number(settings.height ?? 70);
   const fade = Number(settings.fade ?? 18);
-  const blur = Number(settings.blur ?? 48);
-  const glow = Number(settings.glow ?? 22);
+  const blur = Number(settings.blur ?? 60);
+  const glow = Number(settings.glow ?? 18);
   const enabled = settings.enabled !== false;
   const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
   const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
@@ -85,7 +85,7 @@ function blendedImage(src, alt, className = "", settings = {}) {
   return `
     <span class="blend-media ${className}" style="--blend-image: url('${image}'); ${blendStyle(settings)}">
       <span class="blend-media-bg" aria-hidden="true"></span>
-      <img src="${image}" alt="${label}" />
+      <img src="${image}" alt="${label}" loading="lazy" decoding="async" />
     </span>
   `;
 }
@@ -260,7 +260,7 @@ function renderCart() {
           .map(
             (item) => `
               <div class="cart-line">
-                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" />
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
                   <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${deliveryLabel(item)} · ${ProductStore.formatWon(item.price * item.quantity)}</span>

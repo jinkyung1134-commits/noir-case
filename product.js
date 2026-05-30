@@ -61,8 +61,8 @@ function blendStyle(settings = {}) {
   const width = Number(settings.width ?? 76);
   const height = Number(settings.height ?? 70);
   const fade = Number(settings.fade ?? 18);
-  const blur = Number(settings.blur ?? 48);
-  const glow = Number(settings.glow ?? 22);
+  const blur = Number(settings.blur ?? 60);
+  const glow = Number(settings.glow ?? 18);
   const enabled = settings.enabled !== false;
   const solid = Math.max(18, Math.min(78, 100 - fade * 2.2));
   const soft = Math.max(solid + 6, Math.min(90, 100 - fade * 1.15));
@@ -84,13 +84,13 @@ function blendStyle(settings = {}) {
   ].join("; ");
 }
 
-function blendedImage(src, alt, className = "", settings = {}) {
+function blendedImage(src, alt, className = "", settings = {}, loading = "lazy") {
   const image = escapeHtml(src);
   const label = escapeHtml(alt);
   return `
     <span class="blend-media ${className}" style="--blend-image: url('${image}'); ${blendStyle(settings)}">
       <span class="blend-media-bg" aria-hidden="true"></span>
-      <img src="${image}" alt="${label}" />
+      <img src="${image}" alt="${label}" loading="${loading}" decoding="async" />
     </span>
   `;
 }
@@ -148,7 +148,7 @@ function renderDetail() {
         <strong>${ProductStore.formatPrice(displayProduct.price)}</strong>
       </div>
       <div class="apple-hero-visual">
-        ${blendedImage(displayProduct.image, displayProduct.title, "hero-blend", displayProduct.mediaBlend)}
+        ${blendedImage(displayProduct.image, displayProduct.title, "hero-blend", displayProduct.mediaBlend, "eager")}
       </div>
     </section>
 
@@ -196,14 +196,14 @@ function renderDetail() {
         <h2>${I18n.t("gallery")}</h2>
       </div>
       <div class="detail-main-image" data-main-image-wrap>
-        ${blendedImage(displayProduct.image, displayProduct.title, "", displayProduct.mediaBlend)}
+        ${blendedImage(displayProduct.image, displayProduct.title, "", displayProduct.mediaBlend, "eager")}
       </div>
       <div class="detail-thumbs">
         ${gallery
           .map(
             (image) => `
               <button type="button" data-thumb="${escapeHtml(image)}" aria-label="${I18n.t("gallery")}">
-                <img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)}" />
+                <img src="${escapeHtml(image)}" alt="${escapeHtml(displayProduct.title)}" loading="lazy" decoding="async" />
               </button>
             `,
           )
@@ -266,7 +266,7 @@ function renderDetail() {
 function renderMotionAsset(product) {
   const source = product.video || SAMPLE_MOTION;
   if (String(source).toLowerCase().endsWith(".svg")) {
-    return `<img class="detail-video motion-preview" src="${escapeHtml(source)}" alt="${escapeHtml(product.title)} motion preview" />`;
+    return `<img class="detail-video motion-preview" src="${escapeHtml(source)}" alt="${escapeHtml(product.title)} motion preview" loading="lazy" decoding="async" />`;
   }
   return `<video class="detail-video" src="${escapeHtml(source)}" controls playsinline preload="metadata"></video>`;
 }
@@ -313,7 +313,7 @@ function renderCart() {
           .map(
             (item) => `
               <div class="cart-line">
-                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" />
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
                   <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${ProductStore.formatPrice(item.price * item.quantity)}</span>

@@ -262,8 +262,8 @@
       width: clampNumber(value.width, 76, 20, 180),
       height: clampNumber(value.height, 70, 20, 180),
       fade: clampNumber(value.fade, 18, 0, 55),
-      blur: clampNumber(value.blur, 48, 0, 140),
-      glow: clampNumber(value.glow, 22, 0, 100),
+      blur: clampNumber(value.blur, 60, 0, 140),
+      glow: clampNumber(value.glow, 18, 0, 100),
     };
   }
 
@@ -498,10 +498,10 @@
     const slides = defaultProducts.map((product) => ({
       productId: product.id,
       tone: 34,
-      imageBrightness: 78,
-      backgroundGlow: 22,
-      overlayStrength: 58,
-      textTop: 50,
+      imageBrightness: 92,
+      backgroundGlow: 26,
+      overlayStrength: 48,
+      textTop: 46,
       imageScale: 100,
       mediaBlend: normalizeMediaBlend(product.mediaBlend),
     }));
@@ -511,10 +511,10 @@
       selectedProductIds: defaultProducts.map((product) => product.id),
       slides,
       tone: 34,
-      imageBrightness: 78,
-      backgroundGlow: 22,
-      overlayStrength: 58,
-      textTop: 50,
+      imageBrightness: 92,
+      backgroundGlow: 26,
+      overlayStrength: 48,
+      textTop: 46,
       imageScale: 100,
     };
   }
@@ -531,10 +531,10 @@
       accentColor: slide.accentColor || fallback.accentColor || "#b9975b",
       textColor: slide.textColor || fallback.textColor || "#f7f3ea",
       tone: clampNumber(slide.tone, fallback.tone ?? 34, 0, 100),
-      imageBrightness: clampNumber(slide.imageBrightness, fallback.imageBrightness ?? 78, 35, 150),
+      imageBrightness: clampNumber(slide.imageBrightness, fallback.imageBrightness ?? 92, 55, 150),
       backgroundGlow: clampNumber(slide.backgroundGlow, fallback.backgroundGlow ?? 22, 0, 100),
-      overlayStrength: clampNumber(slide.overlayStrength, fallback.overlayStrength ?? 58, 0, 100),
-      textTop: clampNumber(slide.textTop, fallback.textTop ?? 50, 25, 85),
+      overlayStrength: clampNumber(slide.overlayStrength, fallback.overlayStrength ?? 48, 0, 74),
+      textTop: clampNumber(slide.textTop, fallback.textTop ?? 46, 25, 56),
       imageScale: clampNumber(slide.imageScale, fallback.imageScale ?? 100, 50, 160),
       mediaBlend: normalizeMediaBlend(slide.mediaBlend || fallback.mediaBlend),
     };
@@ -561,10 +561,10 @@
       selectedProductIds: slides.length ? slides.map((slide) => slide.productId) : selectedProductIds,
       slides: slides.length ? slides : fallback.slides,
       tone: clampNumber(settings.tone, fallback.tone, 0, 100),
-      imageBrightness: clampNumber(settings.imageBrightness, fallback.imageBrightness, 35, 150),
+      imageBrightness: clampNumber(settings.imageBrightness, fallback.imageBrightness, 55, 150),
       backgroundGlow: clampNumber(settings.backgroundGlow, fallback.backgroundGlow, 0, 100),
-      overlayStrength: clampNumber(settings.overlayStrength, fallback.overlayStrength, 0, 100),
-      textTop: clampNumber(settings.textTop, fallback.textTop, 25, 85),
+      overlayStrength: clampNumber(settings.overlayStrength, fallback.overlayStrength, 0, 74),
+      textTop: clampNumber(settings.textTop, fallback.textTop, 25, 56),
       imageScale: clampNumber(settings.imageScale, fallback.imageScale, 50, 160),
     };
   }
