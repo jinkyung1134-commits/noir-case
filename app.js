@@ -215,7 +215,7 @@ function renderHero() {
   heroDots.innerHTML = heroProducts
     .map(
       (_, index) => `
-        <button class="${index === heroIndex ? "active" : ""}" type="button" data-hero-dot="${index}" aria-label="${index + 1}번 상품 보기"></button>
+        <button class="${index === heroIndex ? "active" : ""}" type="button" data-hero-dot="${index}" aria-label="${index + 1} ${I18n.t("productDotLabel")}"></button>
       `,
     )
     .join("");
