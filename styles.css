@@ -2314,9 +2314,10 @@ input[type="range"] {
   }
 
   .apple-immersive-hero {
-    min-height: 118vh;
+    min-height: 110vh;
     align-content: start;
-    padding-top: 44px;
+    gap: 14px;
+    padding-top: 34px;
     padding-bottom: 92px;
   }
 
@@ -2330,21 +2331,26 @@ input[type="range"] {
   }
 
   .apple-hero-copy h1 {
-    font-size: clamp(42px, 13vw, 68px);
+    font-size: clamp(40px, 12vw, 62px);
+  }
+
+  .apple-hero-copy p:not(.eyebrow) {
+    font-size: 17px;
+    line-height: 1.5;
   }
 
   .apple-hero-visual img {
     position: sticky;
-    top: 284px;
+    top: 256px;
     width: min(100%, 520px);
-    max-height: 44vh;
+    max-height: 48vh;
   }
 
   .apple-hero-visual .blend-media {
     position: sticky;
-    top: 284px;
+    top: 256px;
     width: min(100%, 520px);
-    max-height: 44vh;
+    max-height: 48vh;
   }
 
   .apple-overview-strip article,
