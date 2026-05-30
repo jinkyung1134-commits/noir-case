@@ -23,6 +23,23 @@ function deliveryLabel(item) {
   return I18n.t("shippingDelivery");
 }
 
+function defaultOption() {
+  if (I18n.current() === "ko") return "기본 옵션";
+  if (I18n.current() === "zh") return "默认选项";
+  return "Default option";
+}
+
+function cartOptionLabel(option) {
+  const value = String(option || "").trim();
+  return !value || value === "기본 옵션" ? defaultOption() : value;
+}
+
+function cartQuantityLabel(quantity) {
+  const count = Number(quantity) || 1;
+  if (I18n.current() === "en") return `${count} ${I18n.t("itemUnit")}${count === 1 ? "" : "s"}`;
+  return `${count}${I18n.t("itemUnit")}`;
+}
+
 function orderReceivedStatus() {
   if (I18n.current() === "zh") return "订单已接收";
   if (I18n.current() === "en") return "Order received";
@@ -39,7 +56,12 @@ function renderCheckout() {
   });
 
   if (!cart.length) {
-    checkoutItems.innerHTML = `<p class="checkout-note">${I18n.t("cartEmpty")}</p>`;
+    checkoutItems.innerHTML = `
+      <div class="empty-state checkout-empty">
+        <p>${I18n.t("cartEmpty")}</p>
+        <a class="secondary-btn small-btn" href="index.html#products">${I18n.t("cartEmptyAction")}</a>
+      </div>
+    `;
     checkoutTotal.textContent = ProductStore.formatWon(0);
     return;
   }
@@ -51,7 +73,7 @@ function renderCheckout() {
           <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" />
           <div>
             <h3>${escapeHtml(item.title)}</h3>
-            <span>${escapeHtml(item.option)} · ${item.quantity}개 · ${deliveryLabel(item)}</span>
+            <span>${escapeHtml(cartOptionLabel(item.option))} · ${cartQuantityLabel(item.quantity)} · ${deliveryLabel(item)}</span>
           </div>
           <strong>${ProductStore.formatWon(item.price * item.quantity)}</strong>
         </div>

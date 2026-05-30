@@ -29,7 +29,7 @@
         <h1 data-i18n="checkoutTitle">주문서 작성</h1>
         <form class="checkout-form" data-checkout-form>
           <label><span data-i18n="name">받는 분</span>
-            <input name="name" required autocomplete="name" placeholder="이름" />
+            <input name="name" required autocomplete="name" placeholder="이름" data-i18n-placeholder="namePlaceholder" />
           </label>
           <label><span data-i18n="phone">연락처</span>
             <input name="phone" required autocomplete="tel" inputmode="tel" placeholder="010-0000-0000" />
@@ -39,13 +39,13 @@
           </label>
           <div class="shipping-fields" data-shipping-fields>
             <label><span data-i18n="address">주소</span>
-              <input name="address" required autocomplete="street-address" placeholder="도로명 주소" />
+              <input name="address" required autocomplete="street-address" placeholder="도로명 주소" data-i18n-placeholder="addressPlaceholder" />
             </label>
             <label><span data-i18n="addressDetail">상세 주소</span>
-              <input name="addressDetail" autocomplete="address-line2" placeholder="동, 호수 등" />
+              <input name="addressDetail" autocomplete="address-line2" placeholder="동, 호수 등" data-i18n-placeholder="addressDetailPlaceholder" />
             </label>
             <label><span data-i18n="memo">배송 요청사항</span>
-              <textarea name="memo" placeholder="부재 시 문 앞에 놓아주세요."></textarea>
+              <textarea name="memo" placeholder="부재 시 문 앞에 놓아주세요." data-i18n-placeholder="memoPlaceholder"></textarea>
             </label>
           </div>
           <button class="primary-btn full" type="submit" data-i18n="createOrder">주문 생성 및 결제</button>
@@ -71,8 +71,8 @@
     <div class="toast" data-toast role="status" aria-live="polite"></div>
 
     <script src="config.js"></script>
-    <script src="i18n.js?v=20260530-cartcopy"></script>
+    <script src="i18n.js?v=20260530-checkoutcopy"></script>
     <script src="store.js"></script>
-    <script src="checkout.js"></script>
+    <script src="checkout.js?v=20260530-checkoutcopy"></script>
   </body>
 </html>
