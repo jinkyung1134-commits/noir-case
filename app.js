@@ -152,7 +152,7 @@ function renderProducts() {
           const product = I18n.localizedProduct(rawProduct);
           return `
             <article class="product-card">
-              <a class="product-link" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="${escapeHtml(product.title)} 상세 보기">
+              <a class="product-link" href="product.html?id=${encodeURIComponent(product.id)}" aria-label="${escapeHtml(product.title)} ${I18n.t("detail")}">
                 <div class="product-media">
                   ${blendedImage(product.image, product.title, "", product.mediaBlend)}
                   <span class="product-badge">${escapeHtml(product.badge)}</span>

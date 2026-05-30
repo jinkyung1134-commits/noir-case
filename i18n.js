@@ -300,7 +300,19 @@
   function localizedProduct(product) {
     const lang = current();
     const local = product && product.i18n && product.i18n[lang];
-    return local ? { ...product, ...local } : product;
+    if (local) return { ...product, ...local };
+    if (!product || lang === "ko") return product;
+
+    const title = String(product.title || "");
+    const subtitle = String(product.subtitle || "");
+    const overrides = {};
+    if (title === "Noir Signature Style Set" && /대표 상품|프리미엄 스타일 세트/.test(subtitle)) {
+      overrides.subtitle =
+        lang === "zh"
+          ? "可打磨为代表商品的高级风格套装"
+          : "A premium style set ready to refine as a signature product.";
+    }
+    return Object.keys(overrides).length ? { ...product, ...overrides } : product;
   }
 
   function mountSwitcher() {
