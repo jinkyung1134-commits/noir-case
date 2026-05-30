@@ -2211,6 +2211,30 @@ input[type="range"] {
     padding: 8px;
   }
 
+  .cart-fab {
+    right: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    min-width: 54px;
+    min-height: 54px;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+  }
+
+  .cart-fab span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .cart-fab strong {
+    min-width: 26px;
+    height: 26px;
+  }
+
   .hero {
     min-height: 86vh;
     align-items: end;
