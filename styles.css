@@ -2383,6 +2383,10 @@ input[type="range"] {
     padding: 0 18px;
   }
 
+  .product-page .cart-fab {
+    display: none;
+  }
+
   .scroll-reveal {
     transform: translateY(56px) scale(0.985);
     transition-duration: 820ms;
